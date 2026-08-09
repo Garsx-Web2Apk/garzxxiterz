@@ -1,0 +1,99 @@
+name: Flutter Build APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_url:
+        description: 'Release URL'
+        required: true
+        type: string
+      tag:
+        description: 'Release Tag'
+        required: true
+        type: string
+      build_type:
+        description: 'Build Type'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+          - debug
+          - release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+
+      - name: Enable Linux Desktop
+        run: |
+          flutter config --enable-linux-desktop
+
+      - name: Download source from release
+        run: |
+          echo "📥 Downloading source code from release..."
+          curl -L -o source.zip "${{ inputs.release_url }}"
+          unzip source.zip -d ./source
+          ls -la ./source
+          
+          PROJECT_DIR=$(find ./source -name "pubspec.yaml" -printf "%h\n" | head -1)
+          echo "📁 Project directory: $PROJECT_DIR"
+          echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
+          
+          if [ -z "$PROJECT_DIR" ]; then
+            PROJECT_DIR="./source"
+            echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
+          fi
+
+      - name: Install dependencies
+        run: |
+          cd $PROJECT_DIR
+          flutter pub get
+
+      - name: Build APK
+        run: |
+          cd $PROJECT_DIR
+          if [ "${{ inputs.build_type }}" == "debug" ]; then
+            flutter build apk --debug
+          else
+            flutter build apk --release
+          fi
+
+      - name: Upload APK to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ inputs.tag }}
+          files: |
+            ${{ env.PROJECT_DIR }}/build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifact (Backup)
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-apk-${{ inputs.build_type }}
+          path: ${{ env.PROJECT_DIR }}/build/app/outputs/flutter-apk/*.apk
+          retention-days: 7
+
+      - name: Success Message
+        if: success()
+        run: |
+          echo "✅ Build Success!"
+          echo "📱 APK uploaded to release"
+
+      - name: Failure Message
+        if: failure()
+        run: |
+          echo "❌ Build Failed!"
+          echo "📝 Check logs for details"
+          exit 1
