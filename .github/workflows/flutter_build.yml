@@ -1,0 +1,209 @@
+name: Build Flutter APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_url:
+        description: 'Release URL'
+        required: true
+        type: string
+      tag:
+        description: 'Release Tag'
+        required: true
+        type: string
+      build_type:
+        description: 'Build Type'
+        required: true
+        type: choice
+        options:
+          - debug
+          - release
+
+jobs:
+  build:
+    name: 🛠️ Build Flutter APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # ============================================================
+      # STEP 1: CLEAN DISK SPACE
+      # ============================================================
+      - name: 🧹 Free Disk Space
+        run: |
+          sudo apt clean
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          df -h
+
+      # ============================================================
+      # STEP 2: CHECKOUT CODE
+      # ============================================================
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      # ============================================================
+      # STEP 3: SETUP JAVA (WAJIB UNTUK ANDROID)
+      # ============================================================
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+          cache: 'gradle'
+
+      # ============================================================
+      # STEP 4: SETUP ANDROID SDK
+      # ============================================================
+      - name: 📱 Setup Android SDK
+        run: |
+          sudo apt update
+          sudo apt install -y wget unzip
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip commandlinetools-linux-9477386_latest.zip -d cmdline-tools
+          mkdir -p android-sdk/cmdline-tools
+          mv cmdline-tools/cmdline-tools android-sdk/cmdline-tools/latest
+          export ANDROID_SDK_ROOT=$PWD/android-sdk
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+
+      # ============================================================
+      # STEP 5: SETUP FLUTTER
+      # ============================================================
+      - name: 📱 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+
+      # ============================================================
+      # STEP 6: DOWNLOAD PROJECT ZIP
+      # ============================================================
+      - name: 📦 Download Project
+        run: |
+          echo "========================================="
+          echo "📥 DOWNLOADING PROJECT..."
+          echo "========================================="
+          echo "URL: ${{ github.event.inputs.release_url }}"
+          echo "Tag: ${{ github.event.inputs.tag }}"
+          echo "Type: ${{ github.event.inputs.build_type }}"
+          echo "========================================="
+          
+          curl -L -o project.zip "${{ github.event.inputs.release_url }}"
+          
+          if [ ! -f project.zip ]; then
+            echo "❌ Download failed!"
+            exit 1
+          fi
+          
+          echo "📏 File size:"
+          ls -lh project.zip
+          
+          echo "📂 Extracting..."
+          unzip -q project.zip -d project/
+          echo "📁 Project files:"
+          ls -la project/
+
+      # ============================================================
+      # STEP 7: FLUTTER CLEAN
+      # ============================================================
+      - name: 🧹 Flutter Clean
+        run: |
+          cd project/
+          flutter clean || true
+          echo "✅ Flutter clean completed"
+
+      # ============================================================
+      # STEP 8: FLUTTER PUB GET (DENGAN RETRY)
+      # ============================================================
+      - name: 📦 Get Dependencies
+        run: |
+          cd project/
+          echo "📦 Getting dependencies..."
+          for i in {1..3}; do
+            flutter pub get && break
+            echo "⏳ Retry $i ..."
+            sleep 5
+          done
+          echo "✅ Flutter pub get completed"
+
+      # ============================================================
+      # STEP 9: FLUTTER ANALYZE (OPSIONAL)
+      # ============================================================
+      - name: ✅ Analyze Code
+        run: |
+          cd project/
+          flutter analyze || true
+          echo "✅ Analysis completed"
+
+      # ============================================================
+      # STEP 10: BUILD APK
+      # ============================================================
+      - name: 🔨 Build APK
+        run: |
+          cd project/
+          echo "========================================="
+          echo "🔨 BUILDING APK..."
+          echo "========================================="
+          echo "📱 Type: ${{ github.event.inputs.build_type }}"
+          echo "========================================="
+          
+          if [ "${{ github.event.inputs.build_type }}" = "debug" ]; then
+            flutter build apk --debug
+          else
+            flutter build apk --release
+          fi
+          
+          echo "✅ Build completed"
+
+      # ============================================================
+      # STEP 11: LIST APK FILES
+      # ============================================================
+      - name: 📱 List APK Files
+        run: |
+          echo "========================================="
+          echo "📱 SEARCHING APK FILES..."
+          echo "========================================="
+          
+          find project/build -name "*.apk" -type f 2>/dev/null || echo "❌ No APK found"
+          
+          echo ""
+          echo "📂 APK Directory:"
+          ls -la project/build/app/outputs/flutter-apk/ 2>/dev/null || echo "❌ Directory not found"
+          
+          APK_COUNT=$(find project/build -name "*.apk" -type f 2>/dev/null | wc -l)
+          echo ""
+          echo "📊 Total APK found: $APK_COUNT"
+          
+          if [ $APK_COUNT -eq 0 ]; then
+            echo "❌ ERROR: No APK files generated!"
+            exit 1
+          fi
+
+      # ============================================================
+      # STEP 12: UPLOAD APK
+      # ============================================================
+      - name: 📤 Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-files
+          path: project/build/app/outputs/flutter-apk/*.apk
+          if-no-files-found: error
+          retention-days: 7
+
+      # ============================================================
+      # STEP 13: SUCCESS MESSAGE
+      # ============================================================
+      - name: ✅ Success
+        run: |
+          echo "========================================="
+          echo "🎉 BUILD SUCCESSFUL!"
+          echo "========================================="
+          echo "📱 APK files uploaded to artifacts"
+          echo "🔗 Check Artifacts tab for download"
+          echo "========================================="
+          echo "🧙‍♂️ GARSX ENGINE - Build Complete!"
+          echo "========================================="
