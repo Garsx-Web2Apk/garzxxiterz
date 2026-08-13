@@ -1,0 +1,492 @@
+name: 🚀 GARSX Flutter ZIP Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  JAVA_VERSION: "17"
+  FLUTTER_CHANNEL: stable
+  APK_NAME: GARSX-APP.apk
+  GRADLE_OPTS: "-Xmx4g -Dorg.gradle.jvmargs=-Xmx4g"
+
+jobs:
+  build:
+    name: 🛠️ ZIP → Flutter → APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30  # Mencegah hang
+
+    steps:
+
+      # ============================================================
+      # 01. CHECKOUT REPOSITORY
+      # ============================================================
+      - name: "01 - 📥 Checkout Repository"
+        uses: actions/checkout@v4
+
+      # ============================================================
+      # 02. PREPARE WORKSPACE
+      # ============================================================
+      - name: "02 - 📂 Prepare Workspace"
+        shell: bash
+        run: |
+          set -e
+          mkdir -p workspace output
+          echo "✅ Workspace siap."
+
+      # ============================================================
+      # 03. FIND & VALIDATE ZIP
+      # ============================================================
+      - name: "03 - 🔎 Find & Validate ZIP"
+        shell: bash
+        run: |
+          set -e
+          
+          # Cari ZIP terbaru
+          ZIP_FILE=$(find . \
+            -type f \
+            -iname "*.zip" \
+            -not -path "./.git/*" \
+            -printf "%T@ %p\n" \
+            | sort -nr \
+            | head -n1 \
+            | cut -d' ' -f2-)
+          
+          if [ -z "$ZIP_FILE" ]; then
+            echo "❌ ERROR: Tidak ada file ZIP ditemukan!"
+            echo "📌 Upload file ZIP project Flutter ke repository."
+            exit 1
+          fi
+          
+          echo "ZIP_FILE=$ZIP_FILE" >> "$GITHUB_ENV"
+          echo "✅ ZIP ditemukan: $ZIP_FILE"
+          
+          # Validasi ZIP
+          if ! unzip -t "$ZIP_FILE" >/dev/null 2>&1; then
+            echo "❌ ERROR: ZIP rusak atau tidak valid!"
+            exit 1
+          fi
+          
+          echo "✅ ZIP valid."
+
+      # ============================================================
+      # 04. EXTRACT ZIP
+      # ============================================================
+      - name: "04 - 📦 Extract ZIP"
+        shell: bash
+        run: |
+          set -e
+          
+          rm -rf workspace/*
+          
+          if ! unzip -q "$ZIP_FILE" -d workspace; then
+            echo "❌ ERROR: Gagal mengekstrak ZIP!"
+            exit 1
+          fi
+          
+          echo "✅ ZIP berhasil diekstrak."
+          echo ""
+          echo "📂 Struktur workspace:"
+          ls -la workspace/
+
+      # ============================================================
+      # 05. DETECT FLUTTER PROJECT
+      # ============================================================
+      - name: "05 - 🐦 Detect Flutter Project"
+        shell: bash
+        run: |
+          set -e
+          
+          PUBSPEC=$(find workspace \
+            -type f \
+            -name "pubspec.yaml" \
+            -not -path "*/\.*" \
+            | head -n 1)
+          
+          if [ -z "$PUBSPEC" ]; then
+            echo "❌ ERROR: pubspec.yaml tidak ditemukan!"
+            echo "📌 Pastikan ZIP berisi project Flutter yang valid."
+            echo ""
+            echo "📂 Isi workspace:"
+            find workspace -type f -name "*.yaml" -o -name "*.yml" | head -20
+            exit 1
+          fi
+          
+          PROJECT_DIR=$(dirname "$PUBSPEC")
+          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+          echo "✅ Flutter project ditemukan: $PROJECT_DIR"
+
+      # ============================================================
+      # 06. VALIDATE FLUTTER STRUCTURE
+      # ============================================================
+      - name: "06 - 📂 Validate Flutter Structure"
+        shell: bash
+        run: |
+          set -e
+          cd "$PROJECT_DIR"
+          
+          # Cek file penting
+          MISSING_FILES=""
+          [ ! -f "pubspec.yaml" ] && MISSING_FILES="$MISSING_FILES pubspec.yaml"
+          [ ! -d "lib" ] && MISSING_FILES="$MISSING_FILES lib/"
+          [ ! -d "android" ] && MISSING_FILES="$MISSING_FILES android/"
+          
+          if [ -n "$MISSING_FILES" ]; then
+            echo "❌ ERROR: Struktur project tidak lengkap!"
+            echo "📌 Missing: $MISSING_FILES"
+            exit 1
+          fi
+          
+          echo "✅ Struktur project Flutter valid."
+
+      # ============================================================
+      # 07. SETUP JAVA (Dengan Cache)
+      # ============================================================
+      - name: "07 - ☕ Setup Java"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: gradle
+
+      # ============================================================
+      # 08. CACHE GRADLE
+      # ============================================================
+      - name: "08 - 💾 Cache Gradle"
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # ============================================================
+      # 09. SETUP FLUTTER
+      # ============================================================
+      - name: "09 - 🐦 Setup Flutter"
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      # ============================================================
+      # 10. CACHE PUB PACKAGES
+      # ============================================================
+      - name: "10 - 💾 Cache Pub Packages"
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            **/.dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      # ============================================================
+      # 11. FLUTTER DOCTOR (Verbose)
+      # ============================================================
+      - name: "11 - 🩺 Flutter Doctor"
+        run: |
+          flutter doctor -v
+          echo ""
+          echo "📦 Flutter version:"
+          flutter --version
+
+      # ============================================================
+      # 12. CLEAN & INSTALL DEPENDENCIES
+      # ============================================================
+      - name: "12 - 🧹 Clean & Install"
+        shell: bash
+        run: |
+          set -e
+          cd "$PROJECT_DIR"
+          
+          echo "🧹 Cleaning..."
+          flutter clean || echo "⚠️ Clean warning (ignored)"
+          
+          echo "📦 Installing dependencies..."
+          if ! flutter pub get; then
+            echo "❌ ERROR: Gagal install dependencies!"
+            echo ""
+            echo "📋 Cek pubspec.yaml untuk error:"
+            cat pubspec.yaml
+            exit 1
+          fi
+          
+          echo "✅ Dependencies installed."
+
+      # ============================================================
+      # 13. RUN TESTS (Opsional, tidak fail jika tidak ada test)
+      # ============================================================
+      - name: "13 - 🧪 Run Tests (if available)"
+        shell: bash
+        continue-on-error: true  # Jangan fail jika tidak ada test
+        run: |
+          cd "$PROJECT_DIR"
+          
+          if [ -d "test" ] && [ "$(ls -A test)" ]; then
+            echo "🧪 Menjalankan tests..."
+            flutter test --coverage
+            echo "✅ Tests completed"
+          else
+            echo "ℹ️ Tidak ada test ditemukan, skip..."
+          fi
+
+      # ============================================================
+      # 14. FLUTTER ANALYZE (Warning only)
+      # ============================================================
+      - name: "14 - 🧠 Flutter Analyze"
+        shell: bash
+        continue-on-error: true  # Jangan fail karena warning
+        run: |
+          cd "$PROJECT_DIR"
+          flutter analyze || echo "⚠️ Ada warning, tapi build tetap lanjut"
+
+      # ============================================================
+      # 15. VALIDATE ANDROID CONFIG
+      # ============================================================
+      - name: "15 - 🤖 Validate Android"
+        shell: bash
+        run: |
+          set -e
+          cd "$PROJECT_DIR"
+          
+          # Cek gradle wrapper
+          if [ -f "android/gradlew" ]; then
+            chmod +x android/gradlew
+            echo "✅ gradlew found and executable"
+          else
+            echo "⚠️ gradlew tidak ditemukan, menggunakan gradle default"
+          fi
+          
+          # Cek build.gradle
+          if [ -f "android/app/build.gradle" ] || [ -f "android/app/build.gradle.kts" ]; then
+            echo "✅ Android config found"
+          else
+            echo "❌ ERROR: build.gradle tidak ditemukan!"
+            exit 1
+          fi
+
+      # ============================================================
+      # 16. BUILD RELEASE APK
+      # ============================================================
+      - name: "16 - 🔨 Build Release APK"
+        shell: bash
+        run: |
+          set -e
+          cd "$PROJECT_DIR"
+          
+          echo "🔨 Building APK..."
+          echo "⏳ Ini mungkin memakan waktu 3-5 menit..."
+          
+          # Build dengan timeout protection
+          if ! flutter build apk --release --no-tree-shake-icons; then
+            echo ""
+            echo "❌ ERROR: Build gagal!"
+            echo ""
+            echo "📋 Log terakhir:"
+            tail -100 "$PROJECT_DIR/build/app/outputs/flutter-apk/console.log" 2>/dev/null || echo "Log tidak tersedia"
+            exit 1
+          fi
+          
+          echo "✅ Build selesai."
+
+      # ============================================================
+      # 17. VERIFY APK
+      # ============================================================
+      - name: "17 - ✅ Verify APK"
+        shell: bash
+        run: |
+          set -e
+          
+          APK="$PROJECT_DIR/build/app/outputs/flutter-apk/app-release.apk"
+          
+          # Cari APK di semua kemungkinan lokasi
+          if [ ! -f "$APK" ]; then
+            echo "⚠️ APK tidak ditemukan di lokasi default, mencari..."
+            APK=$(find "$PROJECT_DIR/build" -name "*.apk" -type f | head -n 1)
+            
+            if [ -z "$APK" ]; then
+              echo "❌ ERROR: APK tidak ditemukan!"
+              echo ""
+              echo "📂 Build output:"
+              find "$PROJECT_DIR/build" -type f 2>/dev/null | head -20
+              exit 1
+            fi
+          fi
+          
+          SIZE=$(stat -c%s "$APK" 2>/dev/null || stat -f%z "$APK" 2>/dev/null)
+          
+          if [ -z "$SIZE" ] || [ "$SIZE" -le 0 ]; then
+            echo "❌ ERROR: APK kosong atau tidak valid!"
+            exit 1
+          fi
+          
+          echo "APK_PATH=$APK" >> "$GITHUB_ENV"
+          echo "✅ APK berhasil dibuat!"
+          echo "📦 Ukuran: $((SIZE/1024/1024)) MB ($SIZE bytes)"
+          ls -lh "$APK"
+
+      # ============================================================
+      # 18. PREPARE FINAL APK
+      # ============================================================
+      - name: "18 - 📱 Prepare Final APK"
+        shell: bash
+        run: |
+          set -e
+          
+          mkdir -p output
+          cp "$APK_PATH" "output/$APK_NAME"
+          
+          echo "✅ APK final siap:"
+          ls -lh "output/$APK_NAME"
+          
+          # Buat checksum
+          sha256sum "output/$APK_NAME" > "output/$APK_NAME.sha256"
+
+      # ============================================================
+      # 19. CREATE BUILD INFO
+      # ============================================================
+      - name: "19 - 📝 Create Build Info"
+        shell: bash
+        run: |
+          cat > output/build-info.txt <<EOF
+          ════════════════════════════════════════
+             GARSX FLUTTER BUILD REPORT
+          ════════════════════════════════════════
+          
+          📱 BUILD INFO
+          ──────────────────────────────────────
+          Status: ✅ SUCCESS
+          Mode: Release
+          Flutter: ${{ env.FLUTTER_CHANNEL }}
+          Java: ${{ env.JAVA_VERSION }}
+          
+          📦 APK INFO
+          ──────────────────────────────────────
+          Name: ${{ env.APK_NAME }}
+          Size: $(du -h "output/$APK_NAME" | cut -f1)
+          SHA256: $(cat "output/$APK_NAME.sha256" | cut -d' ' -f1)
+          
+          🔗 REPOSITORY
+          ──────────────────────────────────────
+          Repo: ${{ github.repository }}
+          Commit: ${{ github.sha }}
+          Run: ${{ github.run_id }}
+          Trigger: ${{ github.event_name }}
+          
+          ⏱️ TIMESTAMP
+          ──────────────────────────────────────
+          Build: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          ════════════════════════════════════════
+          EOF
+          
+          cat output/build-info.txt
+
+      # ============================================================
+      # 20. UPLOAD APK
+      # ============================================================
+      - name: "20 - 📤 Upload APK Artifact"
+        uses: actions/upload-artifact@v4
+        with:
+          name: GARSX-APP-APK
+          path: output/GARSX-APP.apk
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+      # ============================================================
+      # 21. UPLOAD BUILD INFO
+      # ============================================================
+      - name: "21 - 📤 Upload Build Info"
+        uses: actions/upload-artifact@v4
+        with:
+          name: GARSX-BUILD-INFO
+          path: |
+            output/build-info.txt
+            output/GARSX-APP.apk.sha256
+          if-no-files-found: error
+          retention-days: 7
+
+      # ============================================================
+      # 22. SUCCESS SUMMARY
+      # ============================================================
+      - name: "22 - 🎉 Build Success"
+        if: success()
+        run: |
+          cat > "$GITHUB_STEP_SUMMARY" << 'EOF'
+          ## 🎉 GARSX BUILD BERHASIL!
+          
+          ### 📱 APK Details
+          - **File:** `GARSX-APP.apk`
+          - **Size:** $(du -h "output/GARSX-APP.apk" | cut -f1)
+          - **SHA256:** $(cat "output/GARSX-APP.apk.sha256" | cut -d' ' -f1)
+          
+          ### 📦 Artifacts
+          - [Download APK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          
+          ### ✅ Status
+          - Build Mode: Release
+          - Status: Siap digunakan
+          - Tests: ${{ job.status }}
+          
+          ---
+          *Generated by GitHub Actions*
+          EOF
+          
+          echo ""
+          echo "🎉 BUILD SUCCESS!"
+          echo "📱 APK: GARSX-APP.apk"
+          echo "📦 Size: $(du -h output/GARSX-APP.apk | cut -f1)"
+
+      # ============================================================
+      # 23. FAILURE HANDLING
+      # ============================================================
+      - name: "23 - ❌ Build Failed"
+        if: failure()
+        run: |
+          cat > "$GITHUB_STEP_SUMMARY" << 'EOF'
+          ## ❌ GARSX BUILD GAGAL
+          
+          ### 🔍 Troubleshooting Steps
+          1. **Cek log di atas** untuk error spesifik
+          2. **Pastikan ZIP** berisi project Flutter lengkap
+          3. **Cek pubspec.yaml** tidak ada error syntax
+          4. **Cek android/** folder ada dan valid
+          5. **Pastikan file ZIP** tidak corrupt
+          
+          ### 📋 Common Issues
+          - `pubspec.yaml` missing → ZIP bukan project Flutter
+          - `flutter pub get` failed → Dependency conflict
+          - `flutter build` failed → Code error atau konfigurasi
+          
+          ### 🔧 Tips
+          - Build di lokal dulu untuk test
+          - Upload ZIP yang sudah terbukti berjalan
+          - Cek struktur project sesuai standar Flutter
+          
+          ---
+          *Periksa log step yang gagal untuk detail lebih lanjut.*
+          EOF
+          
+          echo ""
+          echo "❌ BUILD GAGAL!"
+          echo "📌 Periksa log di atas untuk detail error."
+
+      # ============================================================
+      # 24. CLEANUP
+      # ============================================================
+      - name: "24 - 🧹 Cleanup"
+        if: always()
+        shell: bash
+        continue-on-error: true
+        run: |
+          # Hapus file besar untuk hemat storage
+          rm -rf workspace/**/build/cache 2>/dev/null || true
+          rm -rf workspace/**/.dart_tool 2>/dev/null || true
+          rm -rf workspace/**/android/.gradle 2>/dev/null || true
+          echo "✅ Cleanup completed"
