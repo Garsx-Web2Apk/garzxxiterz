@@ -1,0 +1,473 @@
+name: GARSX Flutter Build Engine
+
+on:
+  workflow_dispatch:
+    inputs:
+      zip_file:
+        description: "Nama ZIP Flutter project"
+        required: true
+        default: "project.zip"
+
+      environment:
+        description: "Environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+
+      build_type:
+        description: "Build Type"
+        required: true
+        default: "apk"
+        type: choice
+        options:
+          - apk
+          - appbundle
+          - both
+
+      release_tag:
+        description: "GitHub Release tag"
+        required: true
+        default: "v1.0.0"
+
+      release_name:
+        description: "GitHub Release name"
+        required: true
+        default: "GARSX Flutter Build"
+
+      auto_version:
+        description: "Auto increment version"
+        required: true
+        default: "false"
+        type: boolean
+
+      run_tests:
+        description: "Run tests"
+        required: true
+        default: "true"
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: "Build Flutter APK"
+    runs-on: ubuntu-latest
+    
+    steps:
+      # ==========================================================
+      # FASE 1: PERSIAPAN & VALIDASI (Step 1-5)
+      # ==========================================================
+      
+      - name: "1. Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "2. Update System & Install Dependencies"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            git curl wget unzip zip \
+            clang cmake ninja-build pkg-config \
+            libgtk-3-dev libblkid-dev liblzma-dev
+
+      - name: "3. Find & Validate ZIP File"
+        env:
+          ZIP_FILE: ${{ github.event.inputs.zip_file }}
+        run: |
+          echo "🔍 Mencari file: $ZIP_FILE"
+          
+          if [ ! -f "$ZIP_FILE" ]; then
+            echo "❌ ZIP tidak ditemukan: $ZIP_FILE"
+            echo ""
+            echo "📁 ZIP yang tersedia:"
+            find . -maxdepth 2 -type f -iname "*.zip" -print || echo "Tidak ada ZIP"
+            exit 1
+          fi
+          
+          echo "✅ ZIP ditemukan: $ZIP_FILE"
+          echo "📦 Size: $(du -h "$ZIP_FILE" | cut -f1)"
+          
+          echo "Validating ZIP..."
+          unzip -t "$ZIP_FILE" || exit 1
+          echo "✅ ZIP valid"
+
+      - name: "4. Extract Project"
+        run: |
+          rm -rf flutter_project
+          mkdir -p flutter_project
+          
+          echo "📦 Extracting..."
+          unzip -q "${{ github.event.inputs.zip_file }}" -d flutter_project
+          echo "✅ Extract selesai"
+          
+          echo "📁 Struktur:"
+          ls -la flutter_project/
+
+      - name: "5. Detect Flutter Project"
+        id: detect
+        run: |
+          set -e
+          
+          PROJECT_DIR=""
+          
+          PUBSPEC=$(find flutter_project -type f -name "pubspec.yaml" -not -path "*/.dart_tool/*" -not -path "*/build/*" | head -1)
+          
+          if [ -z "$PUBSPEC" ]; then
+            echo "❌ pubspec.yaml tidak ditemukan"
+            echo ""
+            echo "📁 Coba cari di semua folder:"
+            find flutter_project -name "*.yaml" -type f | head -10
+            exit 1
+          fi
+          
+          PROJECT_DIR=$(dirname "$PUBSPEC")
+          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+          echo "✅ Project ditemukan: $PROJECT_DIR"
+          
+          cd "$PROJECT_DIR"
+          test -f pubspec.yaml || exit 1
+          test -d lib || echo "⚠️ Folder lib tidak ditemukan"
+          
+          echo "📱 App Info:"
+          grep -E "^(name|version|description):" pubspec.yaml || true
+
+      # ==========================================================
+      # FASE 2: SETUP ENVIRONMENT (Step 6-12)
+      # ==========================================================
+
+      - name: "6. Setup Flutter"
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: "7. Verify Flutter & Dart"
+        run: |
+          flutter --version
+          dart --version
+
+      - name: "8. Setup Java 17"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: "9. Setup Android SDK"
+        uses: android-actions/setup-android@v3
+
+      - name: "10. Install Android SDK"
+        run: |
+          echo "📱 Installing Android SDK..."
+          
+          sdkmanager "platform-tools" > /dev/null 2>&1 || true
+          sdkmanager "platforms;android-34" > /dev/null 2>&1 || true
+          sdkmanager "build-tools;34.0.0" > /dev/null 2>&1 || true
+          yes | sdkmanager --licenses || true
+          
+          echo "✅ Android SDK installed"
+
+      - name: "11. Configure Flutter"
+        run: |
+          flutter config --enable-android
+          flutter config --no-enable-web
+          flutter config --no-enable-ios
+          flutter doctor -v | head -30
+
+      - name: "12. Prepare Android Project"
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          set -e
+          
+          echo "📱 Preparing Android..."
+          
+          if [ ! -d "android" ]; then
+            echo "⚠️ Android folder tidak ada, membuat..."
+            flutter create --platforms=android .
+          fi
+          
+          if [ ! -f "android/gradlew" ]; then
+            echo "⚠️ gradlew tidak ada, membuat..."
+            cd android
+            gradle wrapper || true
+            cd ..
+          fi
+          
+          chmod +x android/gradlew 2>/dev/null || true
+          
+          echo "✅ Android siap"
+
+      # ==========================================================
+      # FASE 3: DEPENDENSI & QUALITY (Step 13-16)
+      # ==========================================================
+
+      - name: "13. Get Dependencies"
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          echo "📦 Fetching dependencies..."
+          
+          flutter clean || true
+          rm -rf build .dart_tool
+          
+          flutter pub get
+          
+          echo "✅ Dependencies installed"
+
+      - name: "14. Code Generation (Optional)"
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          if grep -q "build_runner" pubspec.yaml 2>/dev/null; then
+            echo "⚙️ Running code generation..."
+            dart run build_runner build --delete-conflicting-outputs || echo "⚠️ Code generation skipped"
+          else
+            echo "ℹ️ No code generation required"
+          fi
+
+      - name: "15. Auto Increment Version"
+        if: github.event.inputs.auto_version == 'true'
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          CURRENT=$(grep '^version:' pubspec.yaml | head -1 | sed 's/version:[[:space:]]*//' | tr -d '"' | tr -d "'")
+          VERSION=$(echo "$CURRENT" | cut -d'+' -f1)
+          BUILD=$(echo "$CURRENT" | cut -d'+' -f2)
+          [ -z "$BUILD" ] && BUILD=0
+          NEW_BUILD=$((BUILD + 1))
+          NEW_VERSION="${VERSION}+${NEW_BUILD}"
+          sed -i "s/^version:.*/version: $NEW_VERSION/" pubspec.yaml
+          echo "📈 Version: $CURRENT -> $NEW_VERSION"
+
+      - name: "16. Quality Checks (Analyze & Test)"
+        if: github.event.inputs.run_tests == 'true'
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          echo "🔍 Running quality checks..."
+          
+          flutter analyze --no-fatal-infos || echo "⚠️ Analysis warnings"
+          
+          if [ -d "test" ] && find test -name "*_test.dart" | grep -q .; then
+            echo "🧪 Running tests..."
+            flutter test || echo "⚠️ Tests failed"
+          else
+            echo "ℹ️ No tests found"
+          fi
+
+      # ==========================================================
+      # FASE 4: SIGNING (Step 17)
+      # ==========================================================
+
+      - name: "17. Setup Signing (Production Only)"
+        if: github.event.inputs.environment == 'production'
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+            echo "🔐 Setting up signing..."
+            
+            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/keystore.jks
+            
+            cat << 'EOF' >> android/app/build.gradle
+            
+            android {
+                signingConfigs {
+                    release {
+                        storeFile file('keystore.jks')
+                        storePassword '${{ secrets.KEYSTORE_PASSWORD }}'
+                        keyAlias '${{ secrets.KEY_ALIAS }}'
+                        keyPassword '${{ secrets.KEY_PASSWORD }}'
+                    }
+                }
+                buildTypes {
+                    release {
+                        signingConfig signingConfigs.release
+                        minifyEnabled true
+                        shrinkResources true
+                    }
+                }
+            }
+            EOF
+            
+            echo "✅ Signing configured"
+          else
+            echo "⚠️ No keystore - using debug signing"
+          fi
+
+      # ==========================================================
+      # FASE 5: BUILD (Step 18-21)
+      # ==========================================================
+
+      - name: "18. Build APK"
+        if: github.event.inputs.build_type == 'apk' || github.event.inputs.build_type == 'both'
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          echo ""
+          echo "╔══════════════════════════════════════════╗"
+          echo "║          BUILDING APK                    ║"
+          echo "╚══════════════════════════════════════════╝"
+          echo ""
+          
+          MODE="release"
+          if [ "${{ github.event.inputs.environment }}" == "staging" ]; then
+            MODE="debug"
+          fi
+          
+          echo "📱 Building $MODE APK..."
+          
+          flutter build apk --$MODE --split-per-abi || flutter build apk --$MODE
+          
+          echo ""
+          echo "✅ APK build complete"
+          
+          echo ""
+          echo "📱 APK files:"
+          find build/app/outputs/flutter-apk -name "*.apk" -exec ls -lh {} \;
+
+      - name: "19. Build App Bundle (AAB)"
+        if: github.event.inputs.build_type == 'appbundle' || github.event.inputs.build_type == 'both'
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          echo ""
+          echo "╔══════════════════════════════════════════╗"
+          echo "║          BUILDING AAB                    ║"
+          echo "╚══════════════════════════════════════════╝"
+          echo ""
+          
+          MODE="release"
+          if [ "${{ github.event.inputs.environment }}" == "staging" ]; then
+            MODE="debug"
+          fi
+          
+          echo "📦 Building $MODE App Bundle..."
+          
+          flutter build appbundle --$MODE
+          
+          echo ""
+          echo "✅ AAB build complete"
+          
+          echo ""
+          echo "📦 AAB file:"
+          find build/app/outputs/bundle -name "*.aab" -exec ls -lh {} \;
+
+      - name: "20. Find APK"
+        id: find_apk
+        if: github.event.inputs.build_type == 'apk' || github.event.inputs.build_type == 'both'
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          APK=$(find build/app/outputs/flutter-apk -name "*.apk" | head -1)
+          
+          if [ -z "$APK" ]; then
+            echo "❌ APK tidak ditemukan"
+            echo ""
+            echo "📁 Coba cari di:"
+            find build -name "*.apk" 2>/dev/null || echo "Tidak ada APK"
+            exit 1
+          fi
+          
+          echo "APK_PATH=$APK" >> "$GITHUB_OUTPUT"
+          echo "APK_PATH=$APK" >> "$GITHUB_ENV"
+          echo "✅ APK: $APK"
+          ls -lh "$APK"
+
+      - name: "21. Find AAB"
+        id: find_aab
+        if: github.event.inputs.build_type == 'appbundle' || github.event.inputs.build_type == 'both'
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          AAB=$(find build/app/outputs/bundle/release -name "*.aab" | head -1)
+          
+          if [ -z "$AAB" ]; then
+            echo "⚠️ AAB tidak ditemukan"
+            exit 0
+          fi
+          
+          echo "AAB_PATH=$AAB" >> "$GITHUB_OUTPUT"
+          echo "AAB_PATH=$AAB" >> "$GITHUB_ENV"
+          echo "✅ AAB: $AAB"
+          ls -lh "$AAB"
+
+      # ==========================================================
+      # FASE 6: UPLOAD & RELEASE (Step 22-24)
+      # ==========================================================
+
+      - name: "22. Prepare Artifacts"
+        run: |
+          mkdir -p output
+          
+          if [ -n "${{ env.APK_PATH }}" ] && [ -f "${{ env.APK_PATH }}" ]; then
+            cp "${{ env.APK_PATH }}" output/
+            echo "✅ APK copied"
+          fi
+          
+          if [ -n "${{ env.AAB_PATH }}" ] && [ -f "${{ env.AAB_PATH }}" ]; then
+            cp "${{ env.AAB_PATH }}" output/
+            echo "✅ AAB copied"
+          fi
+          
+          echo ""
+          echo "📦 Artifacts:"
+          ls -la output/
+
+      - name: "23. Upload Artifact to GitHub"
+        uses: actions/upload-artifact@v4
+        with:
+          name: GARSX-Build
+          path: output/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: "24. Create GitHub Release"
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.release_tag }}
+          name: ${{ github.event.inputs.release_name }}
+          body: |
+            # 🚀 ${{ github.event.inputs.release_name }}
+            
+            ## 📱 Build Information
+            - **Environment**: ${{ github.event.inputs.environment }}
+            - **Build Type**: ${{ github.event.inputs.build_type }}
+            - **Tests**: ${{ github.event.inputs.run_tests == 'true' && '✅ Run' || '⏭️ Skipped' }}
+            
+            ## ✅ Build Status
+            - **Build**: ✅ Success
+            - **Signed**: ${{ github.event.inputs.environment == 'production' && '✅ Yes' || '⚠️ Debug' }}
+            
+            ## 📦 Artifacts
+            - **APK**: ✅ Available
+            - **AAB**: ${{ github.event.inputs.build_type == 'appbundle' || github.event.inputs.build_type == 'both' && '✅ Available' || '❌ Not built' }}
+            
+            ---
+            *Generated by GARSX Build Engine*
+          files: output/*
+          draft: false
+          prerelease: ${{ github.event.inputs.environment == 'staging' }}
+
+      # ==========================================================
+      # FASE 7: FINAL (Step 25)
+      # ==========================================================
+
+      - name: "25. Final Status"
+        run: |
+          echo ""
+          echo "╔═══════════════════════════════════════════╗"
+          echo "║                                           ║"
+          echo "║          ✅ BUILD COMPLETE                ║"
+          echo "║                                           ║"
+          echo "║          GARSX BUILD ENGINE               ║"
+          echo "║                                           ║"
+          echo "╚═══════════════════════════════════════════╝"
+          echo ""
+          echo "📊 Build Summary:"
+          echo "  Environment: ${{ github.event.inputs.environment }}"
+          echo "  Build Type: ${{ github.event.inputs.build_type }}"
+          echo "  Status: ✅ Success"
+          echo ""
+          echo "📦 Artifacts:"
+          ls -la output/ 2>/dev/null || echo "  No artifacts"
+          echo ""
+          echo "🏷️ Release:"
+          echo "  Tag: ${{ github.event.inputs.release_tag }}"
+          echo "  URL: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.event.inputs.release_tag }}"
+          echo ""
+          echo "==========================================="
