@@ -1,0 +1,540 @@
+name: 🚀 GARSX APK Builder
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: 🔨 Build APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+    
+    # ============================================================
+    # STEP 1: CHECKOUT REPOSITORY
+    # ============================================================
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+    
+    # ============================================================
+    # STEP 2: LIST FILES (DEBUG)
+    # ============================================================
+    - name: 📂 List Repository Files
+      run: |
+        echo "════════════════════════════════════════"
+        echo "  📂 REPOSITORY FILES"
+        echo "════════════════════════════════════════"
+        echo ""
+        ls -la
+        echo ""
+        echo "🔍 Searching for ZIP files..."
+        find . -name "*.zip" -type f 2>/dev/null || echo "No ZIP found"
+        echo ""
+        echo "📄 All files:"
+        find . -type f -not -path "./.git/*" | head -30
+    
+    # ============================================================
+    # STEP 3: FIND ZIP FILE (AUTO-DETECT)
+    # ============================================================
+    - name: 🔎 Find ZIP File
+      id: find_zip
+      run: |
+        echo "════════════════════════════════════════"
+        echo "  🔎 SEARCHING FOR ZIP"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        # Cari file ZIP
+        ZIP=$(find . -maxdepth 2 -name "*.zip" -type f | head -1)
+        
+        if [ -z "$ZIP" ]; then
+          echo "❌ ERROR: No ZIP file found!"
+          echo ""
+          echo "📌 SOLUTIONS:"
+          echo "1. Upload ZIP file to repository root"
+          echo "2. Make sure file extension is .zip"
+          echo "3. Check file is not in subfolder"
+          echo ""
+          echo "📂 Current files:"
+          ls -la
+          exit 1
+        fi
+        
+        echo "✅ ZIP found: $ZIP"
+        echo "zip_file=$ZIP" >> $GITHUB_OUTPUT
+        
+        # Validasi ZIP
+        echo ""
+        echo "🔍 Validating ZIP file..."
+        if unzip -t "$ZIP" >/dev/null 2>&1; then
+          echo "✅ ZIP is valid"
+        else
+          echo "❌ ZIP is corrupted or invalid!"
+          exit 1
+        fi
+        
+        # Tampilkan info ZIP
+        SIZE=$(du -h "$ZIP" | cut -f1)
+        echo "📦 Size: $SIZE"
+    
+    # ============================================================
+    # STEP 4: EXTRACT ZIP
+    # ============================================================
+    - name: 📦 Extract ZIP
+      run: |
+        echo "════════════════════════════════════════"
+        echo "  📦 EXTRACTING ZIP"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        mkdir -p workspace
+        rm -rf workspace/*
+        
+        echo "Extracting: ${{ steps.find_zip.outputs.zip_file }}"
+        unzip -q "${{ steps.find_zip.outputs.zip_file }}" -d workspace
+        
+        echo "✅ Extraction complete"
+        echo ""
+        echo "📂 Workspace contents:"
+        ls -la workspace/
+        
+        # Cari project root
+        cd workspace
+        if [ $(ls -1 2>/dev/null | wc -l) -eq 1 ] && [ -d "$(ls)" ]; then
+          ROOT="workspace/$(ls)"
+        else
+          ROOT="workspace"
+        fi
+        
+        echo "root=$ROOT" >> $GITHUB_OUTPUT
+        echo ""
+        echo "📂 Project root: $ROOT"
+        echo ""
+        echo "📂 Project structure:"
+        ls -la "$ROOT"
+    
+    # ============================================================
+    # STEP 5: DETECT PROJECT TYPE
+    # ============================================================
+    - name: 🔍 Detect Project Type
+      id: detect
+      run: |
+        ROOT="${{ steps.extract.outputs.root }}"
+        cd "$ROOT"
+        
+        echo "════════════════════════════════════════"
+        echo "  🔍 DETECTING PROJECT"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        # Flutter
+        if [ -f "pubspec.yaml" ] && [ -d "lib" ]; then
+          echo "type=flutter" >> $GITHUB_OUTPUT
+          echo "✅ Project: FLUTTER"
+          echo ""
+          echo "📄 pubspec.yaml:"
+          head -10 pubspec.yaml
+          exit 0
+        fi
+        
+        # React Native
+        if [ -f "package.json" ] && [ -d "android" ]; then
+          echo "type=react-native" >> $GITHUB_OUTPUT
+          echo "✅ Project: REACT NATIVE"
+          echo ""
+          echo "📄 package.json:"
+          head -10 package.json
+          exit 0
+        fi
+        
+        # Native Android
+        if [ -f "build.gradle" ] || [ -f "settings.gradle" ]; then
+          echo "type=android-native" >> $GITHUB_OUTPUT
+          echo "✅ Project: NATIVE ANDROID"
+          exit 0
+        fi
+        
+        # Ionic/Capacitor
+        if [ -f "capacitor.config.json" ] || [ -f "ionic.config.json" ]; then
+          echo "type=ionic" >> $GITHUB_OUTPUT
+          echo "✅ Project: IONIC/CAPACITOR"
+          exit 0
+        fi
+        
+        # Cordova
+        if [ -f "config.xml" ]; then
+          echo "type=cordova" >> $GITHUB_OUTPUT
+          echo "✅ Project: CORDOVA"
+          exit 0
+        fi
+        
+        # Unknown
+        echo "type=unknown" >> $GITHUB_OUTPUT
+        echo "⚠️ Unknown project type"
+        echo ""
+        echo "📂 Files found:"
+        ls -la
+    
+    # ============================================================
+    # STEP 6: SETUP JAVA
+    # ============================================================
+    - name: ☕ Setup Java
+      if: steps.detect.outputs.type != 'unknown'
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+    
+    # ============================================================
+    # STEP 7: SETUP FLUTTER
+    # ============================================================
+    - name: 🐦 Setup Flutter
+      if: steps.detect.outputs.type == 'flutter'
+      uses: subosito/flutter-action@v2
+      with:
+        channel: stable
+    
+    # ============================================================
+    # STEP 8: SETUP NODE.JS
+    # ============================================================
+    - name: 🟢 Setup Node.js
+      if: steps.detect.outputs.type == 'react-native' || steps.detect.outputs.type == 'ionic' || steps.detect.outputs.type == 'cordova'
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    # ============================================================
+    # STEP 9: BUILD FLUTTER APK
+    # ============================================================
+    - name: 🔨 Build Flutter APK
+      if: steps.detect.outputs.type == 'flutter'
+      run: |
+        ROOT="${{ steps.extract.outputs.root }}"
+        cd "$ROOT"
+        
+        echo "════════════════════════════════════════"
+        echo "  🔨 BUILDING FLUTTER APK"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        echo "📦 Installing dependencies..."
+        flutter pub get
+        
+        echo ""
+        echo "🧹 Cleaning..."
+        flutter clean || true
+        
+        echo ""
+        echo "🔨 Building release APK..."
+        echo "⏳ This may take 3-8 minutes..."
+        flutter build apk --release
+        
+        echo ""
+        echo "✅ Build complete!"
+        
+        mkdir -p output
+        if [ -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
+          cp build/app/outputs/flutter-apk/app-release.apk output/app.apk
+          echo "📱 APK size: $(du -h output/app.apk | cut -f1)"
+        else
+          echo "❌ APK not found!"
+          exit 1
+        fi
+        
+        ls -lh output/
+    
+    # ============================================================
+    # STEP 10: BUILD REACT NATIVE APK
+    # ============================================================
+    - name: 🔨 Build React Native APK
+      if: steps.detect.outputs.type == 'react-native'
+      run: |
+        ROOT="${{ steps.extract.outputs.root }}"
+        cd "$ROOT"
+        
+        echo "════════════════════════════════════════"
+        echo "  🔨 BUILDING REACT NATIVE APK"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        echo "📦 Installing dependencies..."
+        npm install
+        
+        echo ""
+        echo "🔨 Building Android..."
+        cd android
+        chmod +x gradlew
+        ./gradlew assembleRelease
+        
+        echo ""
+        echo "✅ Build complete!"
+        
+        mkdir -p ../output
+        if [ -f "app/build/outputs/apk/release/app-release.apk" ]; then
+          cp app/build/outputs/apk/release/app-release.apk ../output/app.apk
+          echo "📱 APK size: $(du -h ../output/app.apk | cut -f1)"
+        else
+          echo "❌ APK not found!"
+          exit 1
+        fi
+        
+        ls -lh ../output/
+    
+    # ============================================================
+    # STEP 11: BUILD NATIVE ANDROID APK
+    # ============================================================
+    - name: 🔨 Build Native Android APK
+      if: steps.detect.outputs.type == 'android-native'
+      run: |
+        ROOT="${{ steps.extract.outputs.root }}"
+        cd "$ROOT"
+        
+        echo "════════════════════════════════════════"
+        echo "  🔨 BUILDING NATIVE ANDROID APK"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        echo "🔨 Building Android..."
+        chmod +x gradlew
+        ./gradlew assembleRelease
+        
+        echo ""
+        echo "✅ Build complete!"
+        
+        mkdir -p output
+        APK=$(find . -name "*.apk" -type f | head -1)
+        if [ -n "$APK" ]; then
+          cp "$APK" output/app.apk
+          echo "📱 APK size: $(du -h output/app.apk | cut -f1)"
+        else
+          echo "❌ APK not found!"
+          exit 1
+        fi
+        
+        ls -lh output/
+    
+    # ============================================================
+    # STEP 12: BUILD IONIC APK
+    # ============================================================
+    - name: 🔨 Build Ionic APK
+      if: steps.detect.outputs.type == 'ionic'
+      run: |
+        ROOT="${{ steps.extract.outputs.root }}"
+        cd "$ROOT"
+        
+        echo "════════════════════════════════════════"
+        echo "  🔨 BUILDING IONIC APK"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        echo "📦 Installing dependencies..."
+        npm install
+        
+        echo ""
+        echo "🏗️ Building Ionic..."
+        npm run build || echo "No build script"
+        
+        echo ""
+        echo "🔨 Building Android..."
+        cd android
+        chmod +x gradlew
+        ./gradlew assembleRelease
+        
+        echo ""
+        echo "✅ Build complete!"
+        
+        mkdir -p ../output
+        if [ -f "app/build/outputs/apk/release/app-release.apk" ]; then
+          cp app/build/outputs/apk/release/app-release.apk ../output/app.apk
+          echo "📱 APK size: $(du -h ../output/app.apk | cut -f1)"
+        else
+          echo "❌ APK not found!"
+          exit 1
+        fi
+        
+        ls -lh ../output/
+    
+    # ============================================================
+    # STEP 13: BUILD CORDOVA APK
+    # ============================================================
+    - name: 🔨 Build Cordova APK
+      if: steps.detect.outputs.type == 'cordova'
+      run: |
+        ROOT="${{ steps.extract.outputs.root }}"
+        cd "$ROOT"
+        
+        echo "════════════════════════════════════════"
+        echo "  🔨 BUILDING CORDOVA APK"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        echo "📦 Installing Cordova..."
+        npm install -g cordova
+        
+        echo ""
+        echo "🔨 Building Android..."
+        cordova build android --release
+        
+        echo ""
+        echo "✅ Build complete!"
+        
+        mkdir -p output
+        if [ -f "platforms/android/app/build/outputs/apk/release/app-release.apk" ]; then
+          cp platforms/android/app/build/outputs/apk/release/app-release.apk output/app.apk
+          echo "📱 APK size: $(du -h output/app.apk | cut -f1)"
+        else
+          echo "❌ APK not found!"
+          exit 1
+        fi
+        
+        ls -lh output/
+    
+    # ============================================================
+    # STEP 14: BUILD UNKNOWN PROJECT
+    # ============================================================
+    - name: 🔨 Build Unknown Project
+      if: steps.detect.outputs.type == 'unknown'
+      run: |
+        ROOT="${{ steps.extract.outputs.root }}"
+        cd "$ROOT"
+        
+        echo "════════════════════════════════════════"
+        echo "  🔨 BUILDING UNKNOWN PROJECT"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        echo "⚠️ Unknown project type"
+        echo "📂 Files:"
+        ls -la
+        
+        echo ""
+        echo "🔨 Trying to build..."
+        mkdir -p output
+        
+        # Try Gradle
+        if [ -f "gradlew" ]; then
+          echo "📦 Found gradlew, running..."
+          chmod +x gradlew
+          ./gradlew assembleRelease || true
+        fi
+        
+        # Try npm
+        if [ -f "package.json" ]; then
+          echo "📦 Found package.json, running npm..."
+          npm install || true
+          npm run build || true
+        fi
+        
+        # Find any APK
+        APK=$(find . -name "*.apk" -type f | head -1)
+        if [ -n "$APK" ]; then
+          cp "$APK" output/app.apk
+          echo "✅ Found APK!"
+          echo "📱 APK size: $(du -h output/app.apk | cut -f1)"
+        else
+          echo "❌ No APK found!"
+          echo ""
+          echo "📂 All files:"
+          find . -type f | head -50
+          exit 1
+        fi
+        
+        ls -lh output/
+    
+    # ============================================================
+    # STEP 15: RENAME APK
+    # ============================================================
+    - name: 📱 Rename APK
+      id: rename
+      run: |
+        echo "════════════════════════════════════════"
+        echo "  📱 RENAMING APK"
+        echo "════════════════════════════════════════"
+        echo ""
+        
+        ROOT="${{ steps.extract.outputs.root }}"
+        
+        # Cari APK di berbagai lokasi
+        APK=$(find "$ROOT" -name "*.apk" -type f 2>/dev/null | head -1)
+        
+        if [ -z "$APK" ]; then
+          echo "❌ No APK found!"
+          echo ""
+          echo "🔍 Searching everywhere..."
+          find . -name "*.apk" -type f
+          exit 1
+        fi
+        
+        echo "✅ Found APK: $APK"
+        cp "$APK" "GARSX-APP.apk"
+        
+        SIZE=$(du -h "GARSX-APP.apk" | cut -f1)
+        echo "📱 APK Name: GARSX-APP.apk"
+        echo "📦 Size: $SIZE"
+        echo "apk_size=$SIZE" >> $GITHUB_OUTPUT
+        
+        ls -lh GARSX-APP.apk
+    
+    # ============================================================
+    # STEP 16: UPLOAD APK
+    # ============================================================
+    - name: 📤 Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: GARSX-APP
+        path: GARSX-APP.apk
+        if-no-files-found: error
+        retention-days: 7
+    
+    # ============================================================
+    # STEP 17: SUCCESS SUMMARY
+    # ============================================================
+    - name: ✅ Build Success
+      if: success()
+      run: |
+        echo "════════════════════════════════════════"
+        echo "  ✅ BUILD SUCCESSFUL!"
+        echo "════════════════════════════════════════"
+        echo ""
+        echo "📱 APK: GARSX-APP.apk"
+        echo "📦 Size: ${{ steps.rename.outputs.apk_size }}"
+        echo "🔨 Type: ${{ steps.detect.outputs.type }}"
+        echo ""
+        echo "📥 Download from Artifacts below"
+        
+        echo "## ✅ BUILD SUCCESSFUL!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📱 APK Details" >> $GITHUB_STEP_SUMMARY
+        echo "- **File:** GARSX-APP.apk" >> $GITHUB_STEP_SUMMARY
+        echo "- **Size:** ${{ steps.rename.outputs.apk_size }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Project:** ${{ steps.detect.outputs.type }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📥 Download from **Artifacts** below" >> $GITHUB_STEP_SUMMARY
+    
+    # ============================================================
+    # STEP 18: FAILURE HANDLING
+    # ============================================================
+    - name: ❌ Build Failed
+      if: failure()
+      run: |
+        echo "════════════════════════════════════════"
+        echo "  ❌ BUILD FAILED!"
+        echo "════════════════════════════════════════"
+        echo ""
+        echo "🔍 Check logs above for errors"
+        
+        echo "## ❌ BUILD FAILED!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🔍 Troubleshooting:" >> $GITHUB_STEP_SUMMARY
+        echo "1. **Check ZIP file** - Must be in repository root" >> $GITHUB_STEP_SUMMARY
+        echo "2. **Project structure** - Must be valid Flutter/React Native/Android" >> $GITHUB_STEP_SUMMARY
+        echo "3. **Logs above** - Check for specific error messages" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Required files:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Flutter:** pubspec.yaml, lib/, android/" >> $GITHUB_STEP_SUMMARY
+        echo "- **React Native:** package.json, android/" >> $GITHUB_STEP_SUMMARY
+        echo "- **Android:** build.gradle, app/" >> $GITHUB_STEP_SUMMARY
