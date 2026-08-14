@@ -1,0 +1,591 @@
+name: GARSX Web2APK Build Engine
+
+on:
+  workflow_dispatch:
+    inputs:
+      web_url:
+        description: "Website URL"
+        required: true
+        type: string
+
+      app_name:
+        description: "Application name"
+        required: true
+        default: "GARSX Web2APK"
+        type: string
+
+      tag:
+        description: "Build tag"
+        required: true
+        type: string
+
+      build_mode:
+        description: "APK build mode"
+        required: true
+        default: "release"
+        type: choice
+        options:
+          - debug
+          - release
+
+      icon_url:
+        description: "Optional icon URL"
+        required: false
+        default: ""
+        type: string
+
+      only_analyze:
+        description: "Analyze only"
+        required: false
+        default: "false"
+        type: string
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: garsx-web2apk-${{ github.event.inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Web2APK ${{ github.event.inputs.build_mode }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    env:
+      WEB_URL: ${{ github.event.inputs.web_url }}
+      APP_NAME: ${{ github.event.inputs.app_name }}
+      BUILD_TAG: ${{ github.event.inputs.tag }}
+      BUILD_MODE: ${{ github.event.inputs.build_mode }}
+      ICON_URL: ${{ github.event.inputs.icon_url }}
+
+    steps:
+
+      # ============================================================
+      # 1. CHECKOUT
+      # ============================================================
+
+      - name: 📦 Checkout
+        uses: actions/checkout@v4
+
+      # ============================================================
+      # 2. JAVA
+      # ============================================================
+
+      - name: ☕ Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      # ============================================================
+      # 3. NODE
+      # ============================================================
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # ============================================================
+      # 4. ANDROID SDK
+      # ============================================================
+
+      - name: 🤖 Android Environment
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+
+          java -version
+          node --version
+
+          if [ -x "$ANDROID_HOME/platform-tools/adb" ]; then
+            "$ANDROID_HOME/platform-tools/adb" version
+          fi
+
+      # ============================================================
+      # 5. VALIDATE URL
+      # ============================================================
+
+      - name: 🌐 Validate Website URL
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          node - "$WEB_URL" <<'NODE'
+          const { URL } = require("url");
+
+          const value = process.argv[2];
+
+          let url;
+
+          try {
+            url = new URL(value);
+          } catch {
+            throw new Error("URL website tidak valid.");
+          }
+
+          if (!["http:", "https:"].includes(url.protocol)) {
+            throw new Error("URL harus menggunakan HTTP atau HTTPS.");
+          }
+
+          console.log("Valid URL:", url.href);
+          NODE
+
+      # ============================================================
+      # 6. CREATE PROJECT
+      # ============================================================
+
+      - name: 🏗 Create Android Project
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          rm -rf "$RUNNER_TEMP/garsx_web2apk"
+
+          mkdir -p "$RUNNER_TEMP/garsx_web2apk/app/src/main/java/com/garsx/web2apk"
+          mkdir -p "$RUNNER_TEMP/garsx_web2apk/app/src/main/res/values"
+          mkdir -p "$RUNNER_TEMP/garsx_web2apk/app/src/main/res/drawable"
+          mkdir -p "$RUNNER_TEMP/garsx_web2apk/gradle/wrapper"
+
+          echo "WEB2APK_DIR=$RUNNER_TEMP/garsx_web2apk" >> "$GITHUB_ENV"
+
+      # ============================================================
+      # 7. CREATE SETTINGS.GRADLE
+      # ============================================================
+
+      - name: 📝 Generate Gradle Settings
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          cat > "$WEB2APK_DIR/settings.gradle" <<'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+
+          rootProject.name = "GARSXWeb2APK"
+          include(":app")
+          EOF
+
+      # ============================================================
+      # 8. ROOT GRADLE
+      # ============================================================
+
+      - name: 🏗 Generate Root Gradle
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          cat > "$WEB2APK_DIR/build.gradle" <<'EOF'
+          plugins {
+              id 'com.android.application' version '8.7.3' apply false
+          }
+          EOF
+
+      # ============================================================
+      # 9. APP GRADLE
+      # ============================================================
+
+      - name: 🏗 Generate App Gradle
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          cat > "$WEB2APK_DIR/app/build.gradle" <<'EOF'
+          plugins {
+              id 'com.android.application'
+          }
+
+          android {
+              namespace 'com.garsx.web2apk'
+              compileSdk 35
+
+              defaultConfig {
+                  applicationId 'com.garsx.web2apk'
+                  minSdk 23
+                  targetSdk 35
+                  versionCode 1
+                  versionName '1.0'
+              }
+
+              buildTypes {
+                  release {
+                      minifyEnabled false
+                      shrinkResources false
+                  }
+
+                  debug {
+                      minifyEnabled false
+                  }
+              }
+
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_17
+                  targetCompatibility JavaVersion.VERSION_17
+              }
+          }
+
+          dependencies {
+              implementation 'androidx.appcompat:appcompat:1.7.0'
+              implementation 'androidx.webkit:webkit:1.12.1'
+          }
+          EOF
+
+      # ============================================================
+      # 10. ANDROID MANIFEST
+      # ============================================================
+
+      - name: 🤖 Generate AndroidManifest.xml
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          cat > "$WEB2APK_DIR/app/src/main/AndroidManifest.xml" <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+              <uses-permission android:name="android.permission.INTERNET" />
+              <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+              <application
+                  android:allowBackup="true"
+                  android:label="GARSX Web2APK"
+                  android:supportsRtl="true"
+                  android:usesCleartextTraffic="false"
+                  android:theme="@style/AppTheme">
+
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true">
+
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+
+                  </activity>
+
+              </application>
+
+          </manifest>
+          EOF
+
+      # ============================================================
+      # 11. THEME
+      # ============================================================
+
+      - name: 🎨 Generate Android Theme
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          cat > "$WEB2APK_DIR/app/src/main/res/values/styles.xml" <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+
+          <resources>
+
+              <style name="AppTheme"
+                  parent="Theme.AppCompat.Light.NoActionBar">
+
+                  <item name="android:fontFamily">sans</item>
+                  <item name="android:windowActionModeOverlay">true</item>
+                  <item name="android:colorAccent">#2196F3</item>
+
+              </style>
+
+          </resources>
+          EOF
+
+      # ============================================================
+      # 12. JAVA WEBVIEW
+      # ============================================================
+
+      - name: ☕ Generate MainActivity.java
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          node - "$WEB2APK_DIR/app/src/main/java/com/garsx/web2apk/MainActivity.java" "$WEB_URL" "$APP_NAME" <<'NODE'
+          const fs = require("fs");
+
+          const file = process.argv[2];
+          const url = process.argv[3];
+          const appName = process.argv[4];
+
+          const escapeJava = value =>
+            String(value)
+              .replace(/\\/g, "\\\\")
+              .replace(/"/g, '\\"')
+              .replace(/\r/g, "")
+              .replace(/\n/g, "\\n");
+
+          const java = `
+          package com.garsx.web2apk;
+
+          import android.annotation.SuppressLint;
+          import android.os.Bundle;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+
+          import androidx.appcompat.app.AppCompatActivity;
+
+          public class MainActivity extends AppCompatActivity {
+
+              private WebView webView;
+
+              @SuppressLint("SetJavaScriptEnabled")
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+
+                  webView = new WebView(this);
+
+                  WebSettings settings = webView.getSettings();
+
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setDatabaseEnabled(true);
+                  settings.setLoadsImagesAutomatically(true);
+                  settings.setAllowFileAccess(false);
+                  settings.setAllowContentAccess(true);
+                  settings.setSupportZoom(false);
+
+                  webView.setWebViewClient(new WebViewClient());
+
+                  setContentView(webView);
+
+                  webView.loadUrl("${escapeJava(url)}");
+              }
+
+              @Override
+              public void onBackPressed() {
+                  if (webView != null && webView.canGoBack()) {
+                      webView.goBack();
+                  } else {
+                      super.onBackPressed();
+                  }
+              }
+          }
+          `;
+
+          fs.writeFileSync(file, java.trim() + "\\n");
+
+          console.log("Generated:", file);
+          console.log("App:", appName);
+          console.log("URL:", url);
+          NODE
+
+      # ============================================================
+      # 13. GRADLE WRAPPER
+      # ============================================================
+
+      - name: ⚙️ Generate Gradle Wrapper
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          cd "$WEB2APK_DIR"
+
+          gradle wrapper \
+            --gradle-version 8.9 \
+            --distribution-type bin
+
+          chmod +x gradlew
+
+          ./gradlew --version
+
+      # ============================================================
+      # 14. CLEAN
+      # ============================================================
+
+      - name: 🧹 Gradle Clean
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          cd "$WEB2APK_DIR"
+
+          ./gradlew clean
+
+      # ============================================================
+      # 15. BUILD DEBUG
+      # ============================================================
+
+      - name: 🐞 Build Debug APK
+        if: ${{ env.BUILD_MODE == 'debug' }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          cd "$WEB2APK_DIR"
+
+          ./gradlew \
+            :app:assembleDebug \
+            --no-daemon \
+            --stacktrace
+
+      # ============================================================
+      # 16. BUILD RELEASE
+      # ============================================================
+
+      - name: 🚀 Build Release APK
+        if: ${{ env.BUILD_MODE == 'release' }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          cd "$WEB2APK_DIR"
+
+          ./gradlew \
+            :app:assembleRelease \
+            --no-daemon \
+            --stacktrace
+
+      # ============================================================
+      # 17. LOCATE APK
+      # ============================================================
+
+      - name: 📱 Locate APK
+        if: always()
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          mkdir -p "$RUNNER_TEMP/garsx_web2apk_output"
+
+          APK=""
+
+          if [ "$BUILD_MODE" = "debug" ]; then
+            APK="$WEB2APK_DIR/app/build/outputs/apk/debug/app-debug.apk"
+          else
+            APK="$WEB2APK_DIR/app/build/outputs/apk/release/app-release.apk"
+          fi
+
+          if [ -f "$APK" ]; then
+            cp "$APK" \
+              "$RUNNER_TEMP/garsx_web2apk_output/GARSX-Web2APK.apk"
+
+            ls -lh \
+              "$RUNNER_TEMP/garsx_web2apk_output/GARSX-Web2APK.apk"
+          else
+            echo "APK tidak ditemukan."
+          fi
+
+      # ============================================================
+      # 18. VERIFY APK
+      # ============================================================
+
+      - name: ✅ Verify APK
+        if: success()
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          APK="$RUNNER_TEMP/garsx_web2apk_output/GARSX-Web2APK.apk"
+
+          test -f "$APK"
+          test -s "$APK"
+
+          file "$APK"
+          ls -lh "$APK"
+
+      # ============================================================
+      # 19. UPLOAD ARTIFACT
+      # ============================================================
+
+      - name: 📦 Upload GARSX Web2APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GARSX-Web2APK
+          path: ${{ runner.temp }}/garsx_web2apk_output/GARSX-Web2APK.apk
+          if-no-files-found: error
+          retention-days: 7
+
+      # ============================================================
+      # 20. ERROR DIAGNOSTICS
+      # ============================================================
+
+      - name: 🧾 Collect Web2APK Error
+        if: failure()
+        shell: bash
+        run: |
+          set +e
+
+          OUT="$RUNNER_TEMP/garsx_web2apk_error"
+          mkdir -p "$OUT"
+
+          {
+            echo "=============================================="
+            echo "GARSX WEB2APK BUILD ERROR"
+            echo "=============================================="
+            echo "URL: $WEB_URL"
+            echo "App: $APP_NAME"
+            echo "Tag: $BUILD_TAG"
+            echo "Mode: $BUILD_MODE"
+            echo "Date: $(date -u)"
+            echo
+
+            echo "===== JAVA ====="
+            java -version
+
+            echo
+            echo "===== GRADLE ====="
+            cd "$WEB2APK_DIR" 2>/dev/null && ./gradlew --version
+
+            echo
+            echo "===== PROJECT ====="
+            cd "$WEB2APK_DIR" 2>/dev/null && find . -maxdepth 4 -type f | sort
+
+          } > "$OUT/error.txt" 2>&1
+
+          cat "$OUT/error.txt"
+
+      - name: 📤 Upload Web2APK Error Diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GARSX-Web2APK-Error-${{ env.BUILD_TAG }}
+          path: ${{ runner.temp }}/garsx_web2apk_error
+          if-no-files-found: warn
+          retention-days: 7
+
+      # ============================================================
+      # 21. SUMMARY
+      # ============================================================
+
+      - name: 🏁 Web2APK Summary
+        if: always()
+        shell: bash
+        run: |
+          echo "=============================================="
+          echo " GARSX WEB2APK BUILD FINISHED"
+          echo "=============================================="
+          echo "URL : $WEB_URL"
+          echo "App : $APP_NAME"
+          echo "Mode: $BUILD_MODE"
+          echo "Tag : $BUILD_TAG"
+          echo "Status: ${{ job.status }}"
+          echo "=============================================="
