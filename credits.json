@@ -556,5 +556,11 @@
     "joinedAt": "2026-08-29T15:12:31.011Z",
     "refBy": null,
     "refConfirmed": false
+  },
+  "8304160385": {
+    "credits": 3,
+    "joinedAt": "2026-08-29T19:17:09.043Z",
+    "refBy": null,
+    "refConfirmed": false
   }
 }
