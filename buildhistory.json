@@ -1,5 +1,25 @@
 [
   {
+    "userId": 8304160385,
+    "userName": "..",
+    "project": "SYAM-v2.0.66.zip",
+    "mode": "🐞 Debug Build",
+    "status": "failed",
+    "duration": 37,
+    "at": "2026-08-29T19:21:39.791Z",
+    "id": 1788031299791
+  },
+  {
+    "userId": 8304160385,
+    "userName": "..",
+    "project": "SYAM-v2.0.66.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 38,
+    "at": "2026-08-29T19:19:27.995Z",
+    "id": 1788031167995
+  },
+  {
     "userId": 7392319776,
     "userName": "⏤͟͟͞͞𝐅꙰𝐒꙰ | 𝗙𝗔𝗧𝗛𝗜𝗥꙰꙰꙰꙰꙰꙰꙰⸙ꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋꠋ𑲭𑲭",
     "project": "5_6096078100913724704.zip",
