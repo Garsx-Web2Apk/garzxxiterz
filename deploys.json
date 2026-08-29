@@ -236,5 +236,12 @@
     "domain": "http://panel-wan.rexypediaa.biz.id:3003",
     "oldDomain": "http://38.253.224.75:2690",
     "at": "2026-08-29T01:02:53.962Z"
+  },
+  {
+    "userId": 8591683517,
+    "type": "mod_domain",
+    "domain": "http://turut.aliphandsome.biz.id:10466",
+    "oldDomain": "http://rudybaik.jkt48.my.id:10251",
+    "at": "2026-08-29T07:52:22.086Z"
   }
 ]
