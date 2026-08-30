@@ -1,5 +1,26 @@
 [
   {
+    "userId": 7424876754,
+    "userName": "{username}",
+    "project": "mod_domain_out_7424876754_1788059512043.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 330,
+    "at": "2026-08-30T03:22:51.046Z",
+    "id": 1788060171047
+  },
+  {
+    "userId": 7424876754,
+    "userName": "{username}",
+    "project": "BASE POP PROJECT V3.zip",
+    "mode": "🐞 Debug Build",
+    "status": "success",
+    "apkSize": "166.42",
+    "duration": 322,
+    "at": "2026-08-30T02:59:26.726Z",
+    "id": 1788058766726
+  },
+  {
     "userId": 8753425748,
     "userName": "𝕲𝖆𝖗𝖟𝖝𝖝𝖎𝖙𝖊𝖗𝖟🅂🄲🄰🄼",
     "project": "mod_domain_out_8753425748_1784620212716.zip",
