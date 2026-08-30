@@ -4,6 +4,17 @@
     "userName": "DOLXKZI",
     "project": "base XForcez_Death Rombak By Hanz.zip",
     "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "83.16",
+    "duration": 429,
+    "at": "2026-08-30T06:29:19.477Z",
+    "id": 1788071359478
+  },
+  {
+    "userId": 7541314176,
+    "userName": "DOLXKZI",
+    "project": "base XForcez_Death Rombak By Hanz.zip",
+    "mode": "🚀 Release Build",
     "status": "failed",
     "duration": 326,
     "at": "2026-08-30T06:06:17.694Z",
