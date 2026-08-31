@@ -1,45 +1,13 @@
 [
   {
-    "userId": 8753425748,
-    "userName": "𝕲𝖆𝖗𝖟𝖝𝖝𝖎𝖙𝖊𝖗𝖟🅂🄲🄰🄼",
-    "project": "mod_domain_out_8753425748_1788173146066.zip",
+    "userId": 8682102740,
+    "userName": "ᯓ𝗗𝗛𝗜𝗟𝗭𝗭 『 𝟏#𝐊𝐢𝐧𝐠𝐳𝐳 』",
+    "project": "mod_domain_out_8682102740_1788163605080.zip",
     "mode": "🚀 Release Build",
     "status": "success",
-    "apkSize": "74.74",
-    "duration": 428,
-    "at": "2026-08-31T10:59:00.162Z",
-    "id": 1788173940162
-  },
-  {
-    "userId": 8753425748,
-    "userName": "𝕲𝖆𝖗𝖟𝖝𝖝𝖎𝖙𝖊𝖗𝖟🅂🄲🄰🄼",
-    "project": "BASE_NEKOVERSE_V7.zip",
-    "mode": "🚀 Release Build",
-    "status": "success",
-    "apkSize": "68.81",
-    "duration": 396,
-    "at": "2026-08-31T08:00:15.549Z",
-    "id": 1788163215550
-  },
-  {
-    "userId": 8753425748,
-    "userName": "𝕲𝖆𝖗𝖟𝖝𝖝𝖎𝖙𝖊𝖗𝖟🅂🄲🄰🄼",
-    "project": "output_8753425748_1786944378322.zip",
-    "mode": "🚀 Release Build",
-    "status": "failed",
-    "duration": 277,
-    "at": "2026-08-31T07:35:37.870Z",
-    "id": 1788161737870
-  },
-  {
-    "userId": 8753425748,
-    "userName": "𝕲𝖆𝖗𝖟𝖝𝖝𝖎𝖙𝖊𝖗𝖟🅂🄲🄰🄼",
-    "project": "TokTok😎",
-    "mode": "🌐 Web to APK",
-    "status": "success",
-    "apkSize": "41.74",
-    "duration": 238,
-    "at": "2026-08-31T07:01:12.611Z",
-    "id": 1788159672611
+    "apkSize": "75.18",
+    "duration": 421,
+    "at": "2026-08-31T08:18:11.422Z",
+    "id": 1788164291424
   }
 ]
