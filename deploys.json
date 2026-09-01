@@ -196,10 +196,17 @@
     "at": "2026-08-25T08:23:10.027Z"
   },
   {
-    "userId": 8682102740,
+    "userId": 8753425748,
     "type": "mod_domain",
-    "domain": "http://panelnyariostorecuy.pterocloud.my.id:3011",
-    "oldDomain": "http://kenzz-handsome-jirr.xyzraa.biz.id:4418",
-    "at": "2026-09-01T07:19:59.458Z"
+    "domain": "http://davzzzlegal.systemcloud-panel.my.id:8081",
+    "oldDomain": "http://garsx-jkt48-private.online.biz.id:2012",
+    "at": "2026-08-31T10:45:46.241Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://davzzzlegal.systemcloud-panel.my.id:8031",
+    "oldDomain": "http://davzzzlegal.systemcloud-panel.my.id:8081",
+    "at": "2026-08-31T12:02:35.349Z"
   }
 ]
