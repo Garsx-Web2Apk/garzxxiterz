@@ -1,23 +1,23 @@
 [
   {
-    "userId": 8682102740,
-    "userName": "ᯓ𝗗𝗛𝗜𝗟𝗭𝗭 『 𝟏#𝐊𝐢𝐧𝐠𝐳𝐳 』",
-    "project": "mod_domain_out_8682102740_1788247199139.zip",
+    "userId": 7799281417,
+    "userName": "dav",
+    "project": "ROMBAK_1788247657547_wpypx0.zip",
     "mode": "🚀 Release Build",
     "status": "success",
-    "apkSize": "94.62",
-    "duration": 449,
-    "at": "2026-09-01T07:28:34.797Z",
-    "id": 1788247714797
+    "apkSize": "77.28",
+    "duration": 478,
+    "at": "2026-09-01T07:43:17.854Z",
+    "id": 1788248597854
   },
   {
-    "userId": 8304160385,
-    "userName": "Dikzz",
-    "project": "GENETIC ANTI BYPASS V2.zip",
-    "mode": "🐞 Debug Build",
+    "userId": 7799281417,
+    "userName": "dav",
+    "project": "syntax_fixed_7799281417_1788245906076.zip",
+    "mode": "🚀 Release Build",
     "status": "failed",
-    "duration": 39,
-    "at": "2026-09-01T07:25:33.494Z",
-    "id": 1788247533494
+    "duration": 239,
+    "at": "2026-09-01T07:03:33.455Z",
+    "id": 1788246213455
   }
 ]
