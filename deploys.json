@@ -194,26 +194,5 @@
     "domain": "http://alfa-store-officials.alfamarket2.my.id:4614",
     "oldDomain": "http://herstore.freszeenet.my.id:10303",
     "at": "2026-08-25T08:23:10.027Z"
-  },
-  {
-    "userId": 8682102740,
-    "type": "mod_domain",
-    "domain": "http://panelnyariostorecuy.pterocloud.my.id:3011",
-    "oldDomain": "http://kenzz-handsome-jirr.xyzraa.biz.id:4418",
-    "at": "2026-09-01T07:19:59.458Z"
-  },
-  {
-    "userId": 8329834272,
-    "type": "mod_domain",
-    "domain": "http://felix-private.web.id:10034",
-    "oldDomain": "http://felix-private.web.id:11874",
-    "at": "2026-09-01T11:39:12.620Z"
-  },
-  {
-    "userId": 8329834272,
-    "type": "mod_domain",
-    "domain": "https://t.me/@Cocozick",
-    "oldDomain": "https://t.me",
-    "at": "2026-09-01T11:41:19.178Z"
   }
 ]
