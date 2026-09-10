@@ -532,35 +532,5 @@
     "joinedAt": "2026-08-26T06:57:19.454Z",
     "refBy": null,
     "refConfirmed": false
-  },
-  "7848869051": {
-    "credits": 5,
-    "joinedAt": "2026-09-08T06:34:25.715Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
-  "8304160385": {
-    "credits": 5,
-    "joinedAt": "2026-09-08T07:34:36.616Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
-  "8130739072": {
-    "credits": 5,
-    "joinedAt": "2026-09-08T12:37:26.829Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
-  "8329834272": {
-    "credits": 2,
-    "joinedAt": "2026-09-08T17:36:07.114Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
-  "8089019913": {
-    "credits": 5,
-    "joinedAt": "2026-09-09T06:43:20.033Z",
-    "refBy": null,
-    "refConfirmed": false
   }
 }
