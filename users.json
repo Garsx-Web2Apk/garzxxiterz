@@ -26,5 +26,12 @@
     "username": "@HydraFake1",
     "joinedAt": "2026-09-11T07:08:54.634Z",
     "lastActive": "2026-09-11T07:09:55.463Z"
+  },
+  {
+    "userId": 8539696568,
+    "name": "User",
+    "username": "—",
+    "joinedAt": "2026-09-11T08:09:30.519Z",
+    "lastActive": "2026-09-11T08:09:30.519Z"
   }
 ]
