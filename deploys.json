@@ -194,5 +194,12 @@
     "domain": "http://alfa-store-officials.alfamarket2.my.id:4614",
     "oldDomain": "http://herstore.freszeenet.my.id:10303",
     "at": "2026-08-25T08:23:10.027Z"
+  },
+  {
+    "userId": 7986300382,
+    "type": "mod_domain",
+    "domain": "https://senzserver4.keselekbijiwowo.web.id:2010",
+    "oldDomain": "http://dilzmarketid.omdhanmemek.my.id:2226",
+    "at": "2026-09-12T11:48:15.542Z"
   }
 ]
