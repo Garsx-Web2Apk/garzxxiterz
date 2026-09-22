@@ -1,12 +1,34 @@
 [
   {
-    "userId": 7799977562,
-    "userName": "FARリド 🇯🇵",
-    "project": "race_x_FLUTTER_KARTUN_FIXED_PATCHED.zip",
+    "userId": 8788210973,
+    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
+    "project": "SHARK_V2_UPDATED.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "107.96",
+    "duration": 566,
+    "at": "2026-09-20T04:03:20.209Z",
+    "id": 1789877000210
+  },
+  {
+    "userId": 8788210973,
+    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
+    "project": "SHARK_V2_INTEGRATED.zip",
     "mode": "🚀 Release Build",
     "status": "failed",
-    "duration": 29,
-    "at": "2026-09-22T13:16:37.010Z",
-    "id": 1790082997010
+    "duration": 35,
+    "at": "2026-09-20T03:37:40.687Z",
+    "id": 1789875460687
+  },
+  {
+    "userId": 8788210973,
+    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
+    "project": "SHARK_V2.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "107.66",
+    "duration": 701,
+    "at": "2026-09-19T16:25:52.805Z",
+    "id": 1789835152805
   }
 ]
