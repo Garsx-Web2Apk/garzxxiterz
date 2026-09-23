@@ -1,34 +1,74 @@
 [
   {
-    "userId": 8788210973,
-    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
-    "project": "mod_domain_out_8788210973_1789744169370.zip",
-    "mode": "🚀 Release Build",
-    "status": "success",
-    "apkSize": "106.75",
-    "duration": 720,
-    "at": "2026-09-18T15:24:33.014Z",
-    "id": 1789745073014
-  },
-  {
-    "userId": 7799977562,
-    "userName": "FARリド 🇯🇵",
-    "project": "syntax_fixed_7799977562_1789739102506.zip",
+    "userId": 1175118639,
+    "userName": "kiluaMyticals 𝐀𝐭𝐝𝐁❂𝐘𝐒 🏅",
+    "project": "mod_domain_out_1175118639_1790162887438.zip",
     "mode": "🚀 Release Build",
     "status": "failed",
-    "duration": 219,
-    "at": "2026-09-18T13:57:33.027Z",
-    "id": 1789739853028
+    "duration": 251,
+    "at": "2026-09-23T12:40:04.243Z",
+    "id": 1790167204243
   },
   {
-    "userId": 8463257259,
-    "userName": "⏤͟͟͞͞𝕯𝖆𝖓𝖓 乂 🅂🄲",
-    "project": "mod_domain_out_8463257259_1789738868955.zip",
+    "userId": 8827843780,
+    "userName": "≤/.ᯓ𝑷𝒊𝒏𝒛𝒙 𝟕𝟕𝟕.\\≥",
+    "project": "Base Phising.zip",
     "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 46,
+    "at": "2026-09-23T12:05:29.976Z",
+    "id": 1790165129976
+  },
+  {
+    "userId": 1175118639,
+    "userName": "kiluaMyticals 𝐀𝐭𝐝𝐁❂𝐘𝐒 🏅",
+    "project": "mod_domain_out_1175118639_1790162887438.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 208,
+    "at": "2026-09-23T11:32:28.977Z",
+    "id": 1790163148977
+  },
+  {
+    "userId": 8199936221,
+    "userName": "『𝙲𝙴𝙾』nakula Lol",
+    "project": "mod_domain_out_8199936221_1790154489671.zip",
+    "mode": "🐞 Debug Build",
     "status": "success",
-    "apkSize": "69.39",
-    "duration": 442,
-    "at": "2026-09-18T13:49:34.281Z",
-    "id": 1789739374281
+    "apkSize": "182.56",
+    "duration": 344,
+    "at": "2026-09-23T09:15:30.351Z",
+    "id": 1790154930351
+  },
+  {
+    "userId": 8199936221,
+    "userName": "『𝙲𝙴𝙾』nakula Lol",
+    "project": "mod_domain_out_8199936221_1790153073203.zip",
+    "mode": "🐞 Debug Build",
+    "status": "failed",
+    "duration": 29,
+    "at": "2026-09-23T08:51:18.438Z",
+    "id": 1790153478438
+  },
+  {
+    "userId": 8606384559,
+    "userName": "Dapzy҉҉҈҉҉҈҉҉҈҉҉҈",
+    "project": "DRAXION.zip",
+    "mode": "🚀 Release Build",
+    "status": "timeout",
+    "duration": 1808,
+    "at": "2026-09-23T06:09:03.175Z",
+    "id": 1790143743176
+  },
+  {
+    "userId": 8753425748,
+    "userName": "Garzxxiterz[OPEN RESS PANEL]",
+    "project": "Garzy-pterodactyl",
+    "mode": "🌐 Web to APK",
+    "status": "success",
+    "apkSize": "41.79",
+    "duration": 258,
+    "at": "2026-09-23T04:41:56.564Z",
+    "id": 1790138516564
   }
 ]
