@@ -1,13 +1,34 @@
 [
   {
-    "userId": 8753425748,
-    "userName": "Garzxxiterz[OPEN RESS PANEL]",
-    "project": "Garzy-pterodactyl",
-    "mode": "🌐 Web to APK",
+    "userId": 8788210973,
+    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
+    "project": "SHARK_V2_UPDATED.zip",
+    "mode": "🚀 Release Build",
     "status": "success",
-    "apkSize": "41.79",
-    "duration": 258,
-    "at": "2026-09-23T04:41:56.564Z",
-    "id": 1790138516564
+    "apkSize": "107.96",
+    "duration": 566,
+    "at": "2026-09-20T04:03:20.209Z",
+    "id": 1789877000210
+  },
+  {
+    "userId": 8788210973,
+    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
+    "project": "SHARK_V2_INTEGRATED.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 35,
+    "at": "2026-09-20T03:37:40.687Z",
+    "id": 1789875460687
+  },
+  {
+    "userId": 8788210973,
+    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
+    "project": "SHARK_V2.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "107.66",
+    "duration": 701,
+    "at": "2026-09-19T16:25:52.805Z",
+    "id": 1789835152805
   }
 ]
