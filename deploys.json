@@ -196,31 +196,31 @@
     "at": "2026-08-25T08:23:10.027Z"
   },
   {
-    "userId": 8463257259,
-    "type": "mod_domain",
-    "domain": "http://node.luwwyxyzstoreprivate.pteroq.xyz:3651",
-    "oldDomain": "http://nodehostinger.bissmillah.biz.id:3002",
-    "at": "2026-09-18T13:41:09.184Z"
-  },
-  {
-    "userId": 8788210973,
-    "type": "mod_domain",
-    "domain": "https://papa.queen-official.com:2043",
-    "oldDomain": "https://papa.queen-official.com:2043",
-    "at": "2026-09-18T14:28:17.703Z"
-  },
-  {
-    "userId": 8788210973,
-    "type": "mod_domain",
-    "domain": "https://serverbymiwa.officialteam.my.id:2568",
-    "oldDomain": "https://papa.queen-official.com:2043",
-    "at": "2026-09-18T15:09:29.642Z"
-  },
-  {
     "userId": 7799977562,
     "type": "mod_domain",
     "domain": "http://garzy-official-store.pterocloud.my.id:2106",
-    "oldDomain": "http://zyromodeapa.pteroq.biz.id:10750",
-    "at": "2026-09-18T15:10:36.306Z"
+    "oldDomain": "http://matrax.server.sano.biz.id:3898",
+    "at": "2026-09-23T08:34:05.802Z"
+  },
+  {
+    "userId": 8199936221,
+    "type": "mod_domain",
+    "domain": "http://fizzxofficial.pteroqdactyl.my.id:11965",
+    "oldDomain": "http://fizzxofficial.pteroqdactyl.my.id:11965",
+    "at": "2026-09-23T08:42:44.059Z"
+  },
+  {
+    "userId": 8199936221,
+    "type": "mod_domain",
+    "domain": "http://panel-free.crazybotzz.web.id:2174",
+    "oldDomain": "http://fizzxofficial.pteroqdactyl.my.id:11965",
+    "at": "2026-09-23T08:43:30.209Z"
+  },
+  {
+    "userId": 8199936221,
+    "type": "mod_domain",
+    "domain": "http://fizzxofficial.pteroqdactyl.my.id:11965",
+    "oldDomain": "http://private02.angkasanyabobo.my.id:1315",
+    "at": "2026-09-23T08:44:33.379Z"
   }
 ]
