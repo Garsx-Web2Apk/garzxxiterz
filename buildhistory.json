@@ -1,34 +1,13 @@
 [
   {
-    "userId": 8788210973,
-    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
-    "project": "mod_domain_out_8788210973_1789744169370.zip",
-    "mode": "🚀 Release Build",
+    "userId": 8753425748,
+    "userName": "Garzxxiterz[OPEN RESS PANEL]",
+    "project": "Garzy-pterodactyl",
+    "mode": "🌐 Web to APK",
     "status": "success",
-    "apkSize": "106.75",
-    "duration": 720,
-    "at": "2026-09-18T15:24:33.014Z",
-    "id": 1789745073014
-  },
-  {
-    "userId": 7799977562,
-    "userName": "FARリド 🇯🇵",
-    "project": "syntax_fixed_7799977562_1789739102506.zip",
-    "mode": "🚀 Release Build",
-    "status": "failed",
-    "duration": 219,
-    "at": "2026-09-18T13:57:33.027Z",
-    "id": 1789739853028
-  },
-  {
-    "userId": 8463257259,
-    "userName": "⏤͟͟͞͞𝕯𝖆𝖓𝖓 乂 🅂🄲",
-    "project": "mod_domain_out_8463257259_1789738868955.zip",
-    "mode": "🚀 Release Build",
-    "status": "success",
-    "apkSize": "69.39",
-    "duration": 442,
-    "at": "2026-09-18T13:49:34.281Z",
-    "id": 1789739374281
+    "apkSize": "41.79",
+    "duration": 258,
+    "at": "2026-09-23T04:41:56.564Z",
+    "id": 1790138516564
   }
 ]
