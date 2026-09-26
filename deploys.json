@@ -194,19 +194,5 @@
     "domain": "http://alfa-store-officials.alfamarket2.my.id:4614",
     "oldDomain": "http://herstore.freszeenet.my.id:10303",
     "at": "2026-08-25T08:23:10.027Z"
-  },
-  {
-    "userId": 7799977562,
-    "type": "mod_domain",
-    "domain": "https://garzy-official-store.pteroqdactyl.my.id:2231",
-    "oldDomain": "http://garzy-official-store.pterocloud.my.id:2106",
-    "at": "2026-09-25T07:39:30.145Z"
-  },
-  {
-    "userId": 7799977562,
-    "type": "mod_domain",
-    "domain": "http://garzy-official-store.pteroqdactyl.my.id:2231",
-    "oldDomain": "http://garzy-official-store.pterocloud.my.id:2106",
-    "at": "2026-09-25T07:39:54.409Z"
   }
 ]
