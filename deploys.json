@@ -194,40 +194,5 @@
     "domain": "http://alfa-store-officials.alfamarket2.my.id:4614",
     "oldDomain": "http://herstore.freszeenet.my.id:10303",
     "at": "2026-08-25T08:23:10.027Z"
-  },
-  {
-    "userId": 8329834272,
-    "type": "mod_domain",
-    "domain": "http://felix-private.web.id:4427",
-    "oldDomain": "http://xnael-hayanode.voltxyz.my.id:3255",
-    "at": "2026-09-30T16:28:59.316Z"
-  },
-  {
-    "userId": 8594510495,
-    "type": "mod_domain",
-    "domain": "http://icxninh.keselekbijiwowo.web.id:2000",
-    "oldDomain": "http://ferrytamvan.lixzhosting.biz.id:4004",
-    "at": "2026-09-30T23:05:08.387Z"
-  },
-  {
-    "userId": 8864329799,
-    "type": "mod_domain",
-    "domain": "https://server-ptrodactyl.hostkitaxmasdetz.my.id:2006",
-    "oldDomain": "http://sanzyoffc.panelantirusuh.biz.id:2245",
-    "at": "2026-10-01T11:40:59.205Z"
-  },
-  {
-    "userId": 8864329799,
-    "type": "mod_domain",
-    "domain": "https://server-ptrodactyl.hostkitaxmasdetz.my.id:2006",
-    "oldDomain": "https://sanzyoffc.panelantirusuh.biz.id",
-    "at": "2026-10-01T11:48:02.979Z"
-  },
-  {
-    "userId": 8864329799,
-    "type": "mod_domain",
-    "domain": "https://t.me/YanzNotDevv1",
-    "oldDomain": "https://t.me",
-    "at": "2026-10-01T11:51:16.713Z"
   }
 ]
