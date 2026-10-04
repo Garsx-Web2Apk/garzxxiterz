@@ -2,6 +2,36 @@
   {
     "userId": 8788210973,
     "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
+    "project": "RAT_AGENT_V7.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 37,
+    "at": "2026-10-04T06:45:18.001Z",
+    "id": 1791096318001
+  },
+  {
+    "userId": 8788210973,
+    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
+    "project": "RAT_AGENT_V8_fixed.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 253,
+    "at": "2026-10-04T06:42:42.600Z",
+    "id": 1791096162600
+  },
+  {
+    "userId": 8788210973,
+    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
+    "project": "RAT_AGENT_V10_FIXED.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 24,
+    "at": "2026-10-04T06:22:53.726Z",
+    "id": 1791094973726
+  },
+  {
+    "userId": 8788210973,
+    "userName": "—ᴋʜᴀɪᴢᴇʀ メ 𝐊𝐑𝐘𝐏𝐓`𝟒𝟎𝟒",
     "project": "RAT_AGENT_V10B.zip",
     "mode": "🚀 Release Build",
     "status": "failed",
