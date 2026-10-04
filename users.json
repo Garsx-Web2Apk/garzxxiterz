@@ -937,7 +937,7 @@
     "name": "Riki Mode",
     "username": "@Cocozick",
     "joinedAt": "2026-09-03T02:02:34.726Z",
-    "lastActive": "2026-10-04T01:39:56.231Z"
+    "lastActive": "2026-10-04T02:41:41.317Z"
   },
   {
     "userId": 8270760862,
@@ -1078,5 +1078,12 @@
     "username": "@Yannbug",
     "joinedAt": "2026-10-04T01:48:55.991Z",
     "lastActive": "2026-10-04T01:49:13.824Z"
+  },
+  {
+    "userId": 8723275309,
+    "name": "Pin",
+    "username": "@pinzyyyz",
+    "joinedAt": "2026-10-04T02:35:44.751Z",
+    "lastActive": "2026-10-04T02:35:44.878Z"
   }
 ]
