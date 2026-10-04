@@ -261,8 +261,10 @@
   "ZQ6GWU68": {
     "credits": 50,
     "maxUses": 1,
-    "uses": 0,
-    "usedBy": [],
+    "uses": 1,
+    "usedBy": [
+      8329834272
+    ],
     "createdBy": 8753425748,
     "createdAt": "2026-10-04T02:47:00.984Z"
   }
