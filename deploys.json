@@ -194,5 +194,12 @@
     "domain": "http://alfa-store-officials.alfamarket2.my.id:4614",
     "oldDomain": "http://herstore.freszeenet.my.id:10303",
     "at": "2026-08-25T08:23:10.027Z"
+  },
+  {
+    "userId": 8329834272,
+    "type": "mod_domain",
+    "domain": "http://felix-private.web.id:4427",
+    "oldDomain": "http://felix-private.web.id:3250",
+    "at": "2026-10-04T01:39:45.772Z"
   }
 ]
