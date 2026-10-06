@@ -229,5 +229,19 @@
     "domain": "http://panelpripaatryo.ptrodactyl.my.id:4952",
     "oldDomain": "https://panelpripaatryo.ptrodactyl.my.id:4952",
     "at": "2026-10-05T13:14:49.245Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.alfamarket2.my.id:2744",
+    "oldDomain": "http://garsx-jkt48-private.online.biz.id:2012",
+    "at": "2026-10-06T06:40:37.874Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.alfamarket2.my.id:2744",
+    "oldDomain": "http://garsx-jkt48-private.online.biz.id:2012",
+    "at": "2026-10-06T07:03:42.529Z"
   }
 ]
