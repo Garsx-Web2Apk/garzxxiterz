@@ -1,5 +1,25 @@
 [
   {
+    "userId": 8375248119,
+    "userName": "BIMZZKUY",
+    "project": "ANGELXCRASH.zip",
+    "mode": "🐞 Debug Build",
+    "status": "failed",
+    "duration": 34,
+    "at": "2026-10-06T06:47:32.770Z",
+    "id": 1791269252770
+  },
+  {
+    "userId": 8753425748,
+    "userName": "GarzyOfficial[OPEN RESS PANEL PRIVATE]",
+    "project": "mod_domain_out_8753425748_1791268837629.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 347,
+    "at": "2026-10-06T06:47:19.372Z",
+    "id": 1791269239372
+  },
+  {
     "userId": 7696646100,
     "userName": "BAAN STR AKUN KE 3",
     "project": "BASE POP PROJECT V3.zip",
