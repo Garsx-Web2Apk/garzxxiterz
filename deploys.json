@@ -257,5 +257,26 @@
     "domain": "https://garzy-official-store.alfamarket2.my.id/",
     "oldDomain": "http://kayn.serverprivv.my.id:10789",
     "at": "2026-10-06T08:58:03.816Z"
+  },
+  {
+    "userId": 8375248119,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.alfamarket2.my.id:2534",
+    "oldDomain": "http://rizzzcoba.rezzxstore.my.id:10708",
+    "at": "2026-10-06T12:26:33.227Z"
+  },
+  {
+    "userId": 8375248119,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.alfamarket2.my.id:2534",
+    "oldDomain": "http://noddosyatim.brengsek.my.id:2385",
+    "at": "2026-10-06T12:30:36.072Z"
+  },
+  {
+    "userId": 8375248119,
+    "type": "mod_domain",
+    "domain": "https://t.me/BIMZZKUY",
+    "oldDomain": "https://t.me",
+    "at": "2026-10-06T12:32:42.784Z"
   }
 ]
