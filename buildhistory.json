@@ -2,6 +2,17 @@
   {
     "userId": 8375248119,
     "userName": "BIMZZKUY",
+    "project": "BASE HOLLOW EXECUTION.zip",
+    "mode": "🐞 Debug Build",
+    "status": "success",
+    "apkSize": "159.44",
+    "duration": 315,
+    "at": "2026-10-06T07:53:29.351Z",
+    "id": 1791273209352
+  },
+  {
+    "userId": 8375248119,
+    "userName": "BIMZZKUY",
     "project": "base otax.zip",
     "mode": "🐞 Debug Build",
     "status": "failed",
