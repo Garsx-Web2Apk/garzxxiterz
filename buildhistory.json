@@ -2,6 +2,27 @@
   {
     "userId": 8375248119,
     "userName": "BIMZZKUY",
+    "project": "base otax.zip",
+    "mode": "🐞 Debug Build",
+    "status": "failed",
+    "duration": 29,
+    "at": "2026-10-06T07:34:28.672Z",
+    "id": 1791272068672
+  },
+  {
+    "userId": 8753425748,
+    "userName": "GarzyOfficial[OPEN RESS PANEL PRIVATE]",
+    "project": "mod_domain_out_8753425748_1791270222257.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "75.53",
+    "duration": 440,
+    "at": "2026-10-06T07:18:14.460Z",
+    "id": 1791271094460
+  },
+  {
+    "userId": 8375248119,
+    "userName": "BIMZZKUY",
     "project": "ANGELXCRASH.zip",
     "mode": "🐞 Debug Build",
     "status": "failed",
