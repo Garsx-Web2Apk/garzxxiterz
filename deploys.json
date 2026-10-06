@@ -250,5 +250,12 @@
     "domain": "https://t.me/BIMZZKUY",
     "oldDomain": "https://t.me",
     "at": "2026-10-06T08:13:03.299Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "https://garzy-official-store.alfamarket2.my.id/",
+    "oldDomain": "http://kayn.serverprivv.my.id:10789",
+    "at": "2026-10-06T08:58:03.816Z"
   }
 ]
