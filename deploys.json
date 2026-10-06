@@ -243,5 +243,12 @@
     "domain": "http://garzy-official-store.alfamarket2.my.id:2744",
     "oldDomain": "http://garsx-jkt48-private.online.biz.id:2012",
     "at": "2026-10-06T07:03:42.529Z"
+  },
+  {
+    "userId": 8375248119,
+    "type": "mod_domain",
+    "domain": "https://t.me/BIMZZKUY",
+    "oldDomain": "https://t.me",
+    "at": "2026-10-06T08:13:03.299Z"
   }
 ]
