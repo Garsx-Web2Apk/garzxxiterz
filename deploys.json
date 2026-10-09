@@ -306,5 +306,26 @@
     "domain": "http://garzy-official-store.alfamarket2.my.id:2744",
     "oldDomain": "http://garsx-jkt48-private.online.biz.id:2012",
     "at": "2026-10-09T04:22:51.228Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.alfamarket2.my.id:2744",
+    "oldDomain": "http://garzy-official.pteroq.xyz:2026",
+    "at": "2026-10-09T08:39:44.190Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.alfamarket2.my.id:2372",
+    "oldDomain": "http://garzy-tools-hayyuk.help",
+    "at": "2026-10-09T08:42:30.837Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.alfamarket2.my.id:2747",
+    "oldDomain": "http://garzy-official-store.alfamarket2.my.id:2744",
+    "at": "2026-10-09T08:45:45.645Z"
   }
 ]
