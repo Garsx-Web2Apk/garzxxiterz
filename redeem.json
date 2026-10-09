@@ -249,43 +249,5 @@
     ],
     "createdBy": 8753425748,
     "createdAt": "2026-08-25T08:16:54.320Z"
-  },
-  "VJFCMZRQ": {
-    "credits": 1000,
-    "maxUses": 10,
-    "uses": 0,
-    "usedBy": [],
-    "createdBy": 8753425748,
-    "createdAt": "2026-09-24T06:19:58.317Z"
-  },
-  "ZQ6GWU68": {
-    "credits": 50,
-    "maxUses": 1,
-    "uses": 1,
-    "usedBy": [
-      8329834272
-    ],
-    "createdBy": 8753425748,
-    "createdAt": "2026-10-04T02:47:00.984Z"
-  },
-  "QK6H2QAE": {
-    "credits": 5,
-    "maxUses": 1,
-    "uses": 1,
-    "usedBy": [
-      8375248119
-    ],
-    "createdBy": 8753425748,
-    "createdAt": "2026-10-06T08:20:12.473Z"
-  },
-  "9XDHYY4J": {
-    "credits": 20,
-    "maxUses": 2,
-    "uses": 1,
-    "usedBy": [
-      8375248119
-    ],
-    "createdBy": 8753425748,
-    "createdAt": "2026-10-06T08:23:18.160Z"
   }
 }
