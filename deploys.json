@@ -285,5 +285,19 @@
     "domain": "http://dating.hs-team.biz.id:2011",
     "oldDomain": "http://kinn.rexy-host.biz.id:10429",
     "at": "2026-10-08T20:37:14.681Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.alfamarket2.my.id:2744",
+    "oldDomain": "http://garsx-jkt48-private.online.biz.id:2012",
+    "at": "2026-10-08T23:31:00.415Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.alfamarket2.my.id:2744",
+    "oldDomain": "http://garzy-official-store.alfamarket2.my.id:2744",
+    "at": "2026-10-08T23:31:31.396Z"
   }
 ]
