@@ -342,7 +342,7 @@
     "refConfirmed": false
   },
   "8613334992": {
-    "credits": 15,
+    "credits": 5,
     "joinedAt": "2026-08-24T13:13:29.389Z",
     "refBy": null,
     "refConfirmed": false
@@ -516,7 +516,7 @@
     "refConfirmed": false
   },
   "6772882691": {
-    "credits": 14,
+    "credits": 4,
     "joinedAt": "2026-08-26T02:24:09.435Z",
     "refBy": null,
     "refConfirmed": false
@@ -533,39 +533,9 @@
     "refBy": null,
     "refConfirmed": false
   },
-  "8375248119": {
-    "credits": 5,
-    "joinedAt": "2026-10-21T07:22:00.503Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
-  "8958597709": {
-    "credits": 5,
-    "joinedAt": "2026-10-21T07:24:57.354Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
   "8431736790": {
-    "credits": 11,
-    "joinedAt": "2026-10-21T07:38:47.452Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
-  "8658885661": {
-    "credits": 3,
-    "joinedAt": "2026-10-21T09:44:54.441Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
-  "7848869051": {
-    "credits": 5,
-    "joinedAt": "2026-10-21T09:56:09.766Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
-  "8864329799": {
-    "credits": 5,
-    "joinedAt": "2026-10-21T10:22:48.503Z",
+    "credits": 4,
+    "joinedAt": "2026-10-22T13:18:06.405Z",
     "refBy": null,
     "refConfirmed": false
   }
