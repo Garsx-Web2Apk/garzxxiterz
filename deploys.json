@@ -194,5 +194,54 @@
     "domain": "http://alfa-store-officials.alfamarket2.my.id:4614",
     "oldDomain": "http://herstore.freszeenet.my.id:10303",
     "at": "2026-08-25T08:23:10.027Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2415",
+    "oldDomain": "http://ferxzzfortwynty12panel.myserverr.web.id:2051",
+    "at": "2026-10-22T12:54:48.265Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2415",
+    "oldDomain": "http://garzy-official-store.alfamarket2.my.id:2913",
+    "at": "2026-10-22T12:55:14.321Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2415",
+    "oldDomain": "http://garzy-official-store.alfamarket2.my.id:4209",
+    "at": "2026-10-22T12:55:37.785Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2415",
+    "oldDomain": "http://ferxzzfortwynty12panel.myserverr.web.id:2051",
+    "at": "2026-10-22T13:17:47.546Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2415",
+    "oldDomain": "http://garzy-official-store.alfamarket2.my.id:2913",
+    "at": "2026-10-22T13:18:15.428Z"
+  },
+  {
+    "userId": 8753425748,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2415",
+    "oldDomain": "http://garzy-official-store.alfamarket2.my.id:4209",
+    "at": "2026-10-22T13:18:42.766Z"
+  },
+  {
+    "userId": 8431736790,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2698",
+    "oldDomain": "http://ferxzzfortwynty12panel.myserverr.web.id:2051",
+    "at": "2026-10-22T13:20:59.355Z"
   }
 ]
