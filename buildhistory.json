@@ -1,34 +1,13 @@
 [
   {
-    "userId": 8658885661,
-    "userName": "Kiymodzz",
-    "project": "kalkulator_futuristik_flutter.zip",
-    "mode": "🚀 Release Build",
-    "status": "failed",
-    "duration": 40,
-    "at": "2026-10-21T10:10:35.913Z",
-    "id": 1792577435917
-  },
-  {
-    "userId": 8658885661,
-    "userName": "Kiymodzz",
-    "project": "SCAR_PANEL_FLUTTER_BASE_1.0.2.zip",
-    "mode": "🚀 Release Build",
+    "userId": 7255989319,
+    "userName": "ᵂᵃⁿᶻᶻʸ",
+    "project": "Ambadetukam",
+    "mode": "🌐 Web to APK",
     "status": "success",
-    "apkSize": "44.36",
-    "duration": 212,
-    "at": "2026-10-21T09:49:38.869Z",
-    "id": 1792576178869
-  },
-  {
-    "userId": 8431736790,
-    "userName": "PERDI",
-    "project": "mod_name_out_8431736790_1792570997217.zip",
-    "mode": "🚀 Release Build",
-    "status": "success",
-    "apkSize": "83.79",
-    "duration": 435,
-    "at": "2026-10-21T08:33:06.814Z",
-    "id": 1792571586814
+    "apkSize": "41.78",
+    "duration": 361,
+    "at": "2026-10-22T13:06:04.283Z",
+    "id": 1792674364283
   }
 ]
