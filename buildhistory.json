@@ -1,5 +1,36 @@
 [
   {
+    "userId": 8375248119,
+    "userName": "BimzzNotDev",
+    "project": "SYAM.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 45,
+    "at": "2026-10-23T13:20:27.133Z",
+    "id": 1792761627133
+  },
+  {
+    "userId": 8375248119,
+    "userName": "BimzzNotDev",
+    "project": "mod_domain_out_8375248119_1792760398592.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "63.07",
+    "duration": 304,
+    "at": "2026-10-23T13:11:22.913Z",
+    "id": 1792761082913
+  },
+  {
+    "userId": 7799977562,
+    "userName": "𝐅𝐚𝐫𝐢𝐝𝐗𐂅",
+    "project": "output_7799977562_1792611350170.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 419,
+    "at": "2026-10-23T13:03:45.401Z",
+    "id": 1792760625402
+  },
+  {
     "userId": 8880861204,
     "userName": "Kudesk Banking",
     "project": "output_8880861204_1792745879239.zip",
