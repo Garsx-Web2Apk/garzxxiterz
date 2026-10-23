@@ -1070,7 +1070,7 @@
     "name": "Kudesk Banking",
     "username": "@Kudesk_Banking541",
     "joinedAt": "2026-10-23T07:31:09.875Z",
-    "lastActive": "2026-10-23T07:50:02.155Z"
+    "lastActive": "2026-10-23T08:55:33.300Z"
   },
   {
     "userId": 8844575512,
@@ -1085,5 +1085,12 @@
     "username": "@ShanzRL",
     "joinedAt": "2026-10-23T08:44:47.521Z",
     "lastActive": "2026-10-23T08:44:47.633Z"
+  },
+  {
+    "userId": 8082500114,
+    "name": "User",
+    "username": "—",
+    "joinedAt": "2026-10-23T09:09:42.928Z",
+    "lastActive": "2026-10-23T09:09:42.928Z"
   }
 ]
