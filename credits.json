@@ -562,5 +562,11 @@
     "joinedAt": "2026-10-23T03:49:18.708Z",
     "refBy": null,
     "refConfirmed": false
+  },
+  "8375248119": {
+    "credits": 5,
+    "joinedAt": "2026-10-23T07:10:57.886Z",
+    "refBy": null,
+    "refConfirmed": false
   }
 }
