@@ -1,5 +1,26 @@
 [
   {
+    "userId": 8880861204,
+    "userName": "Kudesk Banking",
+    "project": "domain_out_8880861204_1792738872610.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 422,
+    "at": "2026-10-23T07:38:51.842Z",
+    "id": 1792741131842
+  },
+  {
+    "userId": 8753425748,
+    "userName": "GarzyOfficial[OPEN RESS PANEL PRIVATE]",
+    "project": "mod_domain_out_8753425748_1792739496638.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "81.00",
+    "duration": 492,
+    "at": "2026-10-23T07:32:26.859Z",
+    "id": 1792740746859
+  },
+  {
     "userId": 8753425748,
     "userName": "GarzyOfficial[OPEN RESS PANEL PRIVATE]",
     "project": "mod_domain_out_8753425748_1792710103791.zip",
