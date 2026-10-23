@@ -2,6 +2,16 @@
   {
     "userId": 8880861204,
     "userName": "Kudesk Banking",
+    "project": "output_8880861204_1792745879239.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 242,
+    "at": "2026-10-23T09:09:47.265Z",
+    "id": 1792746587265
+  },
+  {
+    "userId": 8880861204,
+    "userName": "Kudesk Banking",
     "project": "domain_out_8880861204_1792738872610.zip",
     "mode": "🚀 Release Build",
     "status": "failed",
