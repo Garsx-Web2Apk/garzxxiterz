@@ -370,7 +370,7 @@
     "name": "User",
     "username": "—",
     "joinedAt": "2026-08-20T06:37:41.724Z",
-    "lastActive": "2026-10-23T20:23:25.822Z"
+    "lastActive": "2026-10-23T21:07:28.853Z"
   },
   {
     "userId": 8044291395,
@@ -1127,5 +1127,12 @@
     "username": "@KIDSS_Official",
     "joinedAt": "2026-10-23T18:20:07.922Z",
     "lastActive": "2026-10-23T18:24:52.027Z"
+  },
+  {
+    "userId": 8670244086,
+    "name": "HunterXRijal",
+    "username": "@hunterxrijal",
+    "joinedAt": "2026-10-23T21:07:56.244Z",
+    "lastActive": "2026-10-23T21:09:59.477Z"
   }
 ]
