@@ -397,5 +397,26 @@
     "domain": "http://garzy-official-store.privatserver.web.id:2592",
     "oldDomain": "http://serverptrerodactyl.smasnug.web.id:3627",
     "at": "2026-10-24T12:50:22.020Z"
+  },
+  {
+    "userId": 8375248119,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2592",
+    "oldDomain": "http://serverptrerodactyl.smasnug.web.id:3627",
+    "at": "2026-10-24T13:41:03.299Z"
+  },
+  {
+    "userId": 8375248119,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2592",
+    "oldDomain": "http://server-private-3.jhonaleystore.id:2071",
+    "at": "2026-10-24T13:41:47.015Z"
+  },
+  {
+    "userId": 8375248119,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2592",
+    "oldDomain": "https://www.sankavollerei.com",
+    "at": "2026-10-24T13:42:43.851Z"
   }
 ]
