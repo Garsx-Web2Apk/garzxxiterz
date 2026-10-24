@@ -341,5 +341,12 @@
     "domain": "http://garzy-official-store.privatserver.web.id:2592",
     "oldDomain": "http://panelpublik.mamhost.biz.id:8656",
     "at": "2026-10-23T12:59:58.833Z"
+  },
+  {
+    "userId": 7799977562,
+    "type": "mod_domain",
+    "domain": "http://garzy-official-store.privatserver.web.id:2139",
+    "oldDomain": "http://panel.ilegall.keselekbijiwowo.web.id:4294",
+    "at": "2026-10-24T00:17:58.016Z"
   }
 ]
