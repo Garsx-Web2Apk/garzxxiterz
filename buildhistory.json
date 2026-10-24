@@ -2,6 +2,59 @@
   {
     "userId": 8594510495,
     "userName": "Shandika",
+    "project": "mod_domain_out_8594510495_1792881557281.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "79.91",
+    "duration": 345,
+    "at": "2026-10-24T22:45:58.992Z",
+    "id": 1792881958993
+  },
+  {
+    "userId": 8653976061,
+    "userName": "Selmek",
+    "project": "base otax.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 37,
+    "at": "2026-10-24T22:45:42.802Z",
+    "id": 1792881942802
+  },
+  {
+    "userId": 8653976061,
+    "userName": "Selmek",
+    "project": "paketan holow.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 25,
+    "at": "2026-10-24T22:40:45.196Z",
+    "id": 1792881645197
+  },
+  {
+    "userId": 8594510495,
+    "userName": "Shandika",
+    "project": "mod_domain_out_8594510495_1792880708187.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "90.90",
+    "duration": 496,
+    "at": "2026-10-24T22:34:18.923Z",
+    "id": 1792881258924
+  },
+  {
+    "userId": 8653976061,
+    "userName": "Selmek",
+    "project": "BASE COXRAT PROJECT.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "76.05",
+    "duration": 430,
+    "at": "2026-10-24T22:32:33.584Z",
+    "id": 1792881153584
+  },
+  {
+    "userId": 8594510495,
+    "userName": "Shandika",
     "project": "mod_domain_out_8594510495_1792855187066.zip",
     "mode": "🚀 Release Build",
     "status": "success",
