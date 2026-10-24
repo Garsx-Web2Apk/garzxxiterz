@@ -418,5 +418,19 @@
     "domain": "http://garzy-official-store.privatserver.web.id:2592",
     "oldDomain": "https://www.sankavollerei.com",
     "at": "2026-10-24T13:42:43.851Z"
+  },
+  {
+    "userId": 8594510495,
+    "type": "mod_domain",
+    "domain": "http://shanzxgamers.keselekbijiwowo.web.id:2005",
+    "oldDomain": "http://rezagtnk.spaced.my.id:9111",
+    "at": "2026-10-24T15:19:29.242Z"
+  },
+  {
+    "userId": 8594510495,
+    "type": "mod_domain",
+    "domain": "http://shanzxgamers.keselekbijiwowo.web.id:2005",
+    "oldDomain": "http://panel-legal.jhonaley.net:4755",
+    "at": "2026-10-24T15:19:47.322Z"
   }
 ]
