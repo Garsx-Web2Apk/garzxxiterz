@@ -2,6 +2,17 @@
   {
     "userId": 8375248119,
     "userName": "BimzzNotDev",
+    "project": "mod_domain_out_8375248119_1792849363641.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "77.77",
+    "duration": 383,
+    "at": "2026-10-24T13:50:05.792Z",
+    "id": 1792849805794
+  },
+  {
+    "userId": 8375248119,
+    "userName": "BimzzNotDev",
     "project": "base SixEyesX Project V17.zip",
     "mode": "🚀 Release Build",
     "status": "failed",
