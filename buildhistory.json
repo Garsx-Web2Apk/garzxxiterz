@@ -1,5 +1,25 @@
 [
   {
+    "userId": 8375248119,
+    "userName": "BimzzNotDev",
+    "project": "Syam (1).zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 30,
+    "at": "2026-10-24T12:02:26.841Z",
+    "id": 1792843346842
+  },
+  {
+    "userId": 8375248119,
+    "userName": "BimzzNotDev",
+    "project": "SYAM.zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 28,
+    "at": "2026-10-24T11:57:35.912Z",
+    "id": 1792843055912
+  },
+  {
     "userId": 8645609525,
     "userName": "tanzy store",
     "project": "BASE DARK LIGHT V7 (1).zip",
