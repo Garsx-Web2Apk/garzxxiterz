@@ -2,6 +2,26 @@
   {
     "userId": 8753425748,
     "userName": "GarzyOfficial[OPEN RESS PANEL PRIVATE]",
+    "project": "#new project(Copy).zip",
+    "mode": "🚀 Release Build",
+    "status": "failed",
+    "duration": 73,
+    "at": "2026-10-25T11:38:12.987Z",
+    "id": 1792928292987
+  },
+  {
+    "userId": 8753425748,
+    "userName": "GarzyOfficial[OPEN RESS PANEL PRIVATE]",
+    "project": "#new project(Copy).zip",
+    "mode": "🧬 Genetic Build",
+    "status": "failed",
+    "duration": 93,
+    "at": "2026-10-25T11:32:51.574Z",
+    "id": 1792927971574
+  },
+  {
+    "userId": 8753425748,
+    "userName": "GarzyOfficial[OPEN RESS PANEL PRIVATE]",
     "project": "ORCA NEW ZSNZ.zip",
     "mode": "🧬 Genetic Build",
     "status": "failed",
