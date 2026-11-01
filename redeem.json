@@ -257,5 +257,16 @@
     "usedBy": [],
     "createdBy": 8753425748,
     "createdAt": "2026-09-24T06:19:58.317Z"
+  },
+  "ZC5AVGDK": {
+    "credits": 100,
+    "maxUses": 5,
+    "uses": 2,
+    "usedBy": [
+      8375248119,
+      8897048051
+    ],
+    "createdBy": 8753425748,
+    "createdAt": "2026-11-01T22:58:47.053Z"
   }
 }
