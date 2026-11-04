@@ -2,6 +2,28 @@
   {
     "userId": 8221118930,
     "userName": "𝘽𝙔𝙔",
+    "project": "mod_name_out_8221118930_1793808830953.zip",
+    "mode": "🐞 Debug Build",
+    "status": "success",
+    "apkSize": "203.86",
+    "duration": 664,
+    "at": "2026-11-04T16:28:20.452Z",
+    "id": 1793809700452
+  },
+  {
+    "userId": 8221118930,
+    "userName": "𝘽𝙔𝙔",
+    "project": "mod_name_out_8221118930_1793808830953.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "107.68",
+    "duration": 439,
+    "at": "2026-11-04T16:26:02.583Z",
+    "id": 1793809562583
+  },
+  {
+    "userId": 8221118930,
+    "userName": "𝘽𝙔𝙔",
     "project": "BASE DARK VERSE V6 RENAME BY @FARZMODS.zip",
     "mode": "🚀 Release Build",
     "status": "failed",
