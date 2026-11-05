@@ -606,7 +606,7 @@
     "refConfirmed": false
   },
   "7622171413": {
-    "credits": 4,
+    "credits": 3,
     "joinedAt": "2026-11-02T09:59:02.870Z",
     "refBy": null,
     "refConfirmed": false
@@ -710,12 +710,6 @@
   "8691636344": {
     "credits": 5,
     "joinedAt": "2026-11-05T07:18:38.835Z",
-    "refBy": null,
-    "refConfirmed": false
-  },
-  "8710699208": {
-    "credits": 5,
-    "joinedAt": "2026-11-05T19:23:12.056Z",
     "refBy": null,
     "refConfirmed": false
   }
