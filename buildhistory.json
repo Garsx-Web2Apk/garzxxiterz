@@ -2,6 +2,17 @@
   {
     "userId": 7622171413,
     "userName": "Dilz suka eror",
+    "project": "SNUXS SPECIAL.zip",
+    "mode": "🚀 Release Build",
+    "status": "success",
+    "apkSize": "205.86",
+    "duration": 630,
+    "at": "2026-11-05T16:10:17.168Z",
+    "id": 1793895017168
+  },
+  {
+    "userId": 7622171413,
+    "userName": "Dilz suka eror",
     "project": "DARK_HOLE_CRASH.zip",
     "mode": "🚀 Release Build",
     "status": "failed",
