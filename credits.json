@@ -719,5 +719,17 @@
     "refBy": null,
     "refConfirmed": false,
     "coins": 500
+  },
+  "8608372393": {
+    "credits": 5,
+    "joinedAt": "2026-11-07T07:19:44.147Z",
+    "refBy": null,
+    "refConfirmed": false
+  },
+  "9255345190": {
+    "credits": 5,
+    "joinedAt": "2026-11-07T07:20:56.751Z",
+    "refBy": null,
+    "refConfirmed": false
   }
 }
