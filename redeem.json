@@ -257,5 +257,15 @@
     "usedBy": [],
     "createdBy": 8753425748,
     "createdAt": "2026-09-24T06:19:58.317Z"
+  },
+  "UR76UUZ9": {
+    "type": "coin",
+    "coins": 5000,
+    "credits": 0,
+    "maxUses": 5,
+    "uses": 0,
+    "usedBy": [],
+    "createdBy": 1763088092,
+    "createdAt": "2026-11-06T09:01:53.531Z"
   }
 }
